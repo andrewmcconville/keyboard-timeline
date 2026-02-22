@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skeuomorphic Echoes — Timeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     THEME TOKENS — DARK
+     ============================================ */
+  [data-theme="dark"] {
+    --bg-deep: #0a0a0c;
+    --bg-card: #111114;
+    --bg-overlay: rgba(10,10,12,0.92);
+    --bg-inset: rgba(255,255,255,0.02);
+    --bg-toc-hover: rgba(255,255,255,0.03);
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-rule: rgba(255,255,255,0.08);
+    --border-accent: rgba(217,175,120,0.3);
+    --text-primary: #e8e4df;
+    --text-secondary: #8a857e;
+    --text-dim: #5a5650;
+    --text-faint: #3a3630;
+    --accent-warm: #d9af78;
+    --accent-echo: #c47d4a;
+    --tag-bg: rgba(217,175,120,0.08);
+    --lost-red: #c47a6a;
+    --lost-bg: rgba(196,122,106,0.06);
+    --lost-border: rgba(196,122,106,0.15);
+    --gained-green: #8abf7a;
+    --gained-bg: rgba(138,191,122,0.06);
+    --gained-border: rgba(138,191,122,0.15);
+    --sensory-purple: #b89adb;
+    --sensory-teal: #7ab8c4;
+    --sensory-gold: #c4a87a;
+    --sensory-green: #8abf7a;
+    --quote-mark: var(--text-faint);
+    --number-color: var(--text-primary);
+    --toggle-bg: rgba(255,255,255,0.06);
+    --toggle-knob: var(--text-secondary);
+    --shadow-card: rgba(0,0,0,0.5);
+    --glow-era-1: rgba(107,91,78,0.04);
+    --glow-era-2: rgba(122,106,82,0.03);
+    --glow-era-3: rgba(196,125,74,0.04);
+    --glow-era-4: rgba(217,175,120,0.05);
+    --toc-number: rgba(217,175,120,0.12);
+    --toc-connector: rgba(255,255,255,0.04);
+    --registry-collected-bg: rgba(217,175,120,0.04);
+    --registry-locked-bg: rgba(255,255,255,0.015);
+  }
+  /* ============================================
+     THEME TOKENS — LIGHT
+     ============================================ */
+  [data-theme="light"] {
+    --bg-deep: #ece8e1;
+    --bg-card: #f5f2ed;
+    --bg-overlay: rgba(236,232,225,0.94);
+    --bg-inset: rgba(0,0,0,0.025);
+    --bg-toc-hover: rgba(0,0,0,0.025);
+    --border-subtle: rgba(0,0,0,0.07);
+    --border-rule: rgba(0,0,0,0.08);
+    --border-accent: rgba(172,120,58,0.3);
+    --text-primary: #2a2520;
+    --text-secondary: #6b6560;
+    --text-dim: #9a948e;
+    --text-faint: #c2bdb6;
+    --accent-warm: #a86f30;
+    --accent-echo: #8a5a28;
+    --tag-bg: rgba(168,111,48,0.08);
+    --lost-red: #a85545;
+    --lost-bg: rgba(168,85,69,0.06);
+    --lost-border: rgba(168,85,69,0.18);
+    --gained-green: #5a8a4a;
+    --gained-bg: rgba(90,138,74,0.06);
+    --gained-border: rgba(90,138,74,0.18);
+    --sensory-purple: #7a5ea0;
+    --sensory-teal: #4a8a96;
+    --sensory-gold: #9a7a40;
+    --sensory-green: #5a8a4a;
+    --quote-mark: rgba(0,0,0,0.08);
+    --number-color: var(--text-primary);
+    --toggle-bg: rgba(0,0,0,0.06);
+    --toggle-knob: var(--text-secondary);
+    --shadow-card: rgba(0,0,0,0.08);
+    --glow-era-1: rgba(168,111,48,0.03);
+    --glow-era-2: rgba(168,111,48,0.02);
+    --glow-era-3: rgba(168,111,48,0.03);
+    --glow-era-4: rgba(168,111,48,0.04);
+    --toc-number: rgba(168,111,48,0.1);
+    --toc-connector: rgba(0,0,0,0.03);
+    --registry-collected-bg: rgba(168,111,48,0.04);
+    --registry-locked-bg: rgba(0,0,0,0.015);
+  }
+
+  html.transitioning, html.transitioning *, html.transitioning *::before, html.transitioning *::after {
+    transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, opacity 0.45s ease !important;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:var(--bg-deep); color:var(--text-primary); font-family:'DM Sans',sans-serif;
+    height:100vh; overflow:hidden; -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column;
+  }
+
+  /* ============================================ TOP NAV ============================================ */
+  .top-bar { height:56px; border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; justify-content:space-between; padding:0 36px; flex-shrink:0; background:var(--bg-deep); z-index:100; }
+  .project-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:400; color:var(--text-primary); }
+  .project-title em { color:var(--accent-warm); font-style:italic; }
+  .project-subtitle { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-left:16px; }
+  .nav-right { display:flex; align-items:center; gap:20px; }
+  .nav-link { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--text-secondary); text-decoration:none; cursor:pointer; transition:color 0.2s; }
+  .nav-link:hover { color:var(--text-primary); }
+  .nav-link.active-nav { color:var(--accent-warm); }
+  .info-btn { width:28px; height:28px; border-radius:50%; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-family:'Playfair Display',serif; font-size:13px; font-style:italic; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .info-btn:hover { border-color:var(--accent-warm); color:var(--accent-warm); }
+  .theme-toggle { width:44px; height:24px; border-radius:12px; background:var(--toggle-bg); border:1px solid var(--border-subtle); cursor:pointer; position:relative; display:flex; align-items:center; padding:0 3px; transition:background 0.3s,border-color 0.3s; flex-shrink:0; }
+  .theme-toggle:hover { border-color:var(--accent-warm); }
+  .toggle-knob { width:16px; height:16px; border-radius:50%; background:var(--toggle-knob); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1),background 0.3s; display:flex; align-items:center; justify-content:center; }
+  [data-theme="light"] .toggle-knob { transform:translateX(20px); }
+  .toggle-icon { width:10px; height:10px; display:flex; align-items:center; justify-content:center; }
+  .toggle-icon svg { width:10px; height:10px; }
+  [data-theme="dark"] .icon-sun { display:none; }
+  [data-theme="light"] .icon-moon { display:none; }
+
+  /* ============================================ ERA BAR ============================================ */
+  .era-bar { height:32px; display:flex; flex-shrink:0; border-bottom:1px solid var(--border-subtle); overflow:hidden; }
+  .era-bar-scroll { display:flex; min-width:2800px; height:100%; }
+  .era-zone { flex:1; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-faint); border-right:1px solid var(--border-subtle); transition:color 0.3s; }
+  .era-zone:last-child { border-right:none; }
+  .era-zone:hover { color:var(--text-secondary); }
+
+  /* ============================================ TIMELINE ============================================ */
+  .main { flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; }
+  .timeline-viewport { flex:1; overflow-x:auto; overflow-y:hidden; position:relative; cursor:grab; }
+  .timeline-viewport:active { cursor:grabbing; }
+  .timeline-viewport::-webkit-scrollbar { height:4px; }
+  .timeline-viewport::-webkit-scrollbar-track { background:var(--bg-deep); }
+  .timeline-viewport::-webkit-scrollbar-thumb { background:var(--text-faint); border-radius:2px; }
+  .timeline-canvas { min-width:2800px; height:100%; position:relative; display:flex; align-items:center; }
+  .timeline-canvas::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse at 12% 50%,var(--glow-era-1) 0%,transparent 40%), radial-gradient(ellipse at 40% 50%,var(--glow-era-2) 0%,transparent 40%), radial-gradient(ellipse at 70% 50%,var(--glow-era-3) 0%,transparent 40%), radial-gradient(ellipse at 92% 45%,var(--glow-era-4) 0%,transparent 35%); pointer-events:none; }
+  .timeline-line { position:absolute; top:50%; left:60px; right:60px; height:1px; background:var(--border-rule); }
+  .timeline-line::before { content:''; position:absolute; left:-40px; top:0; width:40px; height:1px; background:linear-gradient(to right,transparent,var(--border-rule)); }
+  .timeline-line::after { content:''; position:absolute; right:-40px; top:0; width:40px; height:1px; background:linear-gradient(to left,transparent,var(--border-rule)); }
+  .era-tick { position:absolute; top:-6px; width:1px; height:13px; background:var(--border-rule); }
+  .year-marker { position:absolute; top:calc(50% + 18px); font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--text-faint); letter-spacing:1px; transform:translateX(-50%); }
+  .timeline-dot { position:absolute; top:50%; width:8px; height:8px; border-radius:50%; background:var(--text-dim); border:2px solid var(--bg-deep); transform:translate(-50%,-50%); z-index:5; transition:all 0.3s; }
+  .timeline-dot.active { background:var(--accent-warm); box-shadow:0 0 14px rgba(217,175,120,0.4); width:10px; height:10px; }
+  [data-theme="light"] .timeline-dot.active { box-shadow:0 0 14px rgba(168,111,48,0.3); }
+  .stem { position:absolute; width:1px; background:var(--border-rule); z-index:4; }
+  .stem.up { bottom:50%; height:60px; }
+  .stem.down { top:50%; height:60px; }
+  .stem.active { background:var(--border-accent); }
+
+  /* ============================================ TIMELINE CARDS ============================================ */
+  .sku-card { position:absolute; width:300px; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:10px; cursor:pointer; transition:all 0.35s cubic-bezier(0.2,0,0,1); z-index:10; overflow:hidden; }
+  .sku-card:hover { border-color:var(--border-rule); box-shadow:0 16px 48px var(--shadow-card); transform:translateY(-6px); }
+  .sku-card.active { border-color:var(--border-accent); }
+  .sku-card.active:hover { border-color:var(--accent-warm); }
+  .sku-card.above { bottom:calc(50% + 64px); }
+  .sku-card.below { top:calc(50% + 64px); }
+  .sku-inner { padding:22px 24px 20px; }
+  .sku-counter { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2.5px; color:var(--text-dim); margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+  .sku-name-large { font-family:'Playfair Display',serif; font-size:42px; font-weight:700; color:var(--text-primary); line-height:0.95; letter-spacing:-1.5px; margin-bottom:2px; }
+  .sku-name-accent-large { font-family:'Playfair Display',serif; font-size:42px; font-weight:700; font-style:italic; color:var(--accent-warm); line-height:0.95; letter-spacing:-1.5px; margin-bottom:16px; }
+  .sku-rule { height:1px; background:var(--border-rule); margin-bottom:14px; }
+  .sku-tease { font-size:12px; line-height:1.65; color:var(--text-secondary); font-weight:300; margin-bottom:18px; }
+  .sku-cta { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2.5px; color:var(--accent-warm); display:flex; align-items:center; gap:8px; transition:gap 0.25s; }
+  .sku-card:hover .sku-cta { gap:14px; }
+
+  .click-hint { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-faint); z-index:50; display:flex; align-items:center; gap:10px; transition:opacity 0.4s; pointer-events:none; }
+  .scroll-arrows { display:flex; gap:3px; font-size:11px; animation:pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.3;} 50%{opacity:0.8;} }
+
+  /* ============================================ OVERLAY ============================================ */
+  .overlay { position:fixed; inset:0; background:var(--bg-overlay); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); z-index:500; display:none; opacity:0; transition:opacity 0.35s ease; }
+  .overlay.visible { display:flex; opacity:1; }
+  .overlay-panel { position:absolute; top:0; right:0; width:620px; height:100%; background:var(--bg-card); border-left:1px solid var(--border-subtle); overflow-y:auto; overflow-x:hidden; transform:translateX(60px); opacity:0; transition:all 0.4s cubic-bezier(0.2,0,0,1); }
+  .overlay.visible .overlay-panel { transform:translateX(0); opacity:1; }
+  .overlay-panel::-webkit-scrollbar { width:3px; }
+  .overlay-panel::-webkit-scrollbar-track { background:transparent; }
+  .overlay-panel::-webkit-scrollbar-thumb { background:var(--text-faint); border-radius:2px; }
+  .overlay-header { padding:20px 36px; border-bottom:1px solid var(--border-rule); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--bg-card); z-index:10; }
+  .overlay-title-bar { display:flex; align-items:center; gap:14px; }
+  .overlay-sku-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2.5px; color:var(--text-dim); }
+  .overlay-sku-name { font-family:'Playfair Display',serif; font-size:14px; font-weight:400; color:var(--text-secondary); font-style:italic; }
+  .close-btn { width:32px; height:32px; border-radius:50%; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .close-btn:hover { border-color:var(--text-secondary); color:var(--text-primary); }
+
+  /* ============================================ SPLASH VIEW ============================================ */
+  .splash-view { padding:48px 36px 40px; }
+  .splash-era { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:20px; }
+  .splash-display { margin-bottom:10px; line-height:0.86; }
+  .splash-display-line { font-family:'Playfair Display',serif; font-weight:900; color:var(--text-primary); display:block; letter-spacing:-4px; }
+  .splash-display-line.s96 { font-size:96px; }
+  .splash-display-line.s88 { font-size:88px; }
+  .splash-display-line.s80 { font-size:80px; }
+  .splash-display-line.s72 { font-size:72px; }
+  .splash-display-line.accent { color:var(--accent-warm); font-style:italic; }
+  .splash-subtitle { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-top:18px; }
+  .splash-rule { border:none; height:1px; background:var(--border-rule); margin:32px 0; }
+  .splash-intro { font-size:15px; line-height:1.8; color:var(--text-secondary); font-weight:300; max-width:480px; margin-bottom:32px; }
+  .splash-intro strong { color:var(--text-primary); font-weight:500; }
+  .echo-callout { position:relative; padding-left:24px; margin-bottom:40px; }
+  .echo-callout::before { content:''; position:absolute; left:0; top:4px; bottom:4px; width:2px; background:linear-gradient(180deg,var(--accent-warm),var(--accent-echo)); border-radius:2px; }
+  .echo-callout-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:10px; }
+  .echo-callout-text { font-family:'Playfair Display',serif; font-size:18px; font-style:italic; font-weight:400; line-height:1.55; color:var(--text-primary); letter-spacing:-0.2px; }
+  .toc-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-bottom:16px; }
+  .toc-list { display:flex; flex-direction:column; gap:0; }
+  .toc-item { display:grid; grid-template-columns:48px 1fr auto; align-items:center; gap:16px; padding:16px; border-top:1px solid var(--border-rule); cursor:pointer; transition:background 0.2s, padding-left 0.25s; }
+  .toc-item:last-child { border-bottom:1px solid var(--border-rule); }
+  .toc-item:hover { background:var(--bg-toc-hover); padding-left:22px; }
+  .toc-number { font-family:'Playfair Display',serif; font-size:36px; font-weight:800; color:var(--toc-number); line-height:1; letter-spacing:-1px; transition:color 0.2s; }
+  .toc-item:hover .toc-number { color:var(--accent-warm); }
+  .toc-info { display:flex; flex-direction:column; gap:3px; }
+  .toc-name { font-family:'Playfair Display',serif; font-size:17px; font-weight:500; color:var(--text-primary); line-height:1.2; letter-spacing:-0.3px; }
+  .toc-meta-row { display:flex; align-items:center; gap:12px; }
+  .toc-era-tag { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2px; color:var(--accent-warm); background:var(--tag-bg); padding:2px 8px; border-radius:3px; }
+  .toc-year { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); letter-spacing:0.5px; }
+  .toc-arrow { font-size:14px; color:var(--text-faint); transition:color 0.2s, transform 0.2s; }
+  .toc-item:hover .toc-arrow { color:var(--accent-warm); transform:translateX(4px); }
+  .chain-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-rule); border-radius:8px; overflow:hidden; border:1px solid var(--border-subtle); margin-top:32px; }
+  .chain-stat-cell { background:var(--bg-card); padding:16px 14px; text-align:center; }
+  .chain-stat-big { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--number-color); letter-spacing:-1px; line-height:1; margin-bottom:4px; }
+  .chain-stat-label { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); }
+
+  /* ============================================ LINK VIEW ============================================ */
+  .chain-nav { padding:0 36px; display:flex; border-bottom:1px solid var(--border-rule); overflow-x:auto; gap:0; }
+  .chain-nav::-webkit-scrollbar { display:none; }
+  .chain-tab { padding:14px 14px 12px; font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); white-space:nowrap; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; flex-shrink:0; }
+  .chain-tab:hover { color:var(--text-secondary); }
+  .chain-tab.active { color:var(--accent-warm); border-bottom-color:var(--accent-warm); }
+  .back-bar { padding:12px 36px; border-bottom:1px solid var(--border-rule); }
+  .back-btn { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-secondary); background:transparent; border:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:0; transition:color 0.2s, gap 0.2s; }
+  .back-btn:hover { color:var(--accent-warm); gap:10px; }
+  .link-content { padding:40px 36px 28px; }
+  .link-era-badge { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:20px; }
+  .link-display { margin-bottom:10px; line-height:0.88; }
+  .link-display-line { font-family:'Playfair Display',serif; font-weight:800; color:var(--text-primary); display:block; letter-spacing:-3px; }
+  .link-display-line.s72 { font-size:72px; }
+  .link-display-line.s64 { font-size:64px; }
+  .link-display-line.s80 { font-size:80px; }
+  .link-display-line.accent { color:var(--accent-warm); font-style:italic; }
+  .link-year-big { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-secondary); letter-spacing:1px; margin-top:16px; }
+  .link-rule { border:none; height:1px; background:var(--border-rule); margin:28px 0; }
+  .period-quote { margin-bottom:28px; padding:20px 24px; background:var(--bg-inset); border-radius:8px; border:1px solid var(--border-subtle); position:relative; }
+  .period-quote-mark { font-family:'Playfair Display',serif; font-size:64px; font-weight:800; color:var(--quote-mark); line-height:0.5; position:absolute; top:18px; left:16px; opacity:0.5; }
+  .period-quote-text { font-family:'Playfair Display',serif; font-size:16px; font-style:italic; font-weight:400; line-height:1.6; color:var(--text-primary); padding-left:28px; margin-bottom:10px; }
+  .period-quote-attr { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--text-dim); padding-left:28px; }
+  .link-two-col { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-bottom:28px; }
+  .link-body { font-size:14px; line-height:1.8; color:var(--text-secondary); font-weight:300; }
+  .link-body strong { color:var(--text-primary); font-weight:500; }
+  .meta-row { border-top:1px solid var(--border-rule); padding:10px 0; }
+  .meta-row:last-child { border-bottom:1px solid var(--border-rule); }
+  .meta-key { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); margin-bottom:3px; }
+  .meta-val { font-size:12px; color:var(--text-primary); line-height:1.45; }
+  .section-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-bottom:14px; }
+  .numbers-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-rule); border-radius:8px; overflow:hidden; border:1px solid var(--border-subtle); margin-bottom:28px; }
+  .number-cell { background:var(--bg-card); padding:18px 16px; text-align:center; }
+  .number-big { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--number-color); letter-spacing:-1px; line-height:1; margin-bottom:6px; }
+  .number-unit { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); }
+  .context-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border-rule); border-radius:8px; overflow:hidden; border:1px solid var(--border-subtle); margin-bottom:28px; }
+  .context-cell { background:var(--bg-card); padding:16px 18px; }
+  .context-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); margin-bottom:6px; }
+  .context-value { font-size:12px; color:var(--text-primary); line-height:1.5; }
+  .context-cell.full-width { grid-column:1/-1; }
+  .sensory-section { margin-bottom:28px; }
+  .sensory-row { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
+  .s-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; position:relative; top:-1px; }
+  .s-dot.auditory { background:var(--sensory-purple); }
+  .s-dot.tactile { background:var(--sensory-teal); }
+  .s-dot.visual { background:var(--sensory-gold); }
+  .s-dot.gestural { background:var(--sensory-green); }
+  .s-type { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); width:56px; flex-shrink:0; }
+  .s-desc { font-size:12px; color:var(--text-secondary); font-weight:300; }
+  .change-pair { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px; }
+  .change-box { border-radius:8px; padding:16px 18px; border:1px solid; }
+  .change-box.gained { background:var(--gained-bg); border-color:var(--gained-border); }
+  .change-box.lost { background:var(--lost-bg); border-color:var(--lost-border); }
+  .change-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2.5px; margin-bottom:8px; }
+  .change-label.gained-label { color:var(--gained-green); }
+  .change-label.lost-label { color:var(--lost-red); }
+  .change-text { font-size:12px; line-height:1.65; color:var(--text-secondary); font-weight:300; }
+  .carried-section { position:relative; padding-left:24px; margin-bottom:32px; }
+  .carried-section::before { content:''; position:absolute; left:0; top:4px; bottom:4px; width:2px; background:linear-gradient(180deg,var(--accent-warm),var(--accent-echo)); border-radius:2px; }
+  .carried-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:12px; }
+  .carried-text { font-family:'Playfair Display',serif; font-size:20px; font-style:italic; font-weight:400; line-height:1.55; color:var(--text-primary); letter-spacing:-0.3px; }
+  .overlay-footnote { padding-top:24px; border-top:1px solid var(--border-rule); display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; }
+  .fn-marker { font-family:'Playfair Display',serif; font-size:20px; color:var(--accent-warm); line-height:1; flex-shrink:0; }
+  .fn-text { font-size:11px; line-height:1.7; color:var(--text-secondary); font-weight:300; }
+  .link-nav { display:flex; justify-content:space-between; padding:0 36px 36px; }
+  .link-nav-btn { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-secondary); background:transparent; border:1px solid var(--border-subtle); padding:10px 20px; border-radius:4px; cursor:pointer; transition:all 0.2s; }
+  .link-nav-btn:hover { border-color:var(--accent-warm); color:var(--accent-warm); }
+
+  .view-splash, .view-link, .view-about, .view-registry { display:none; }
+  .view-splash.active, .view-link.active, .view-about.active, .view-registry.active { display:block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .view-splash.active, .view-link.active, .view-about.active, .view-registry.active { animation:fadeIn 0.35s ease both; }
+
+  /* ============================================ ABOUT VIEW ============================================ */
+  .about-view { padding:48px 36px 60px; }
+  .about-pretitle { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:24px; }
+  .about-display { margin-bottom:28px; line-height:0.88; }
+  .about-display-line { font-family:'Playfair Display',serif; font-weight:900; color:var(--text-primary); display:block; letter-spacing:-3px; }
+  .about-display-line.s64 { font-size:64px; }
+  .about-display-line.s56 { font-size:56px; }
+  .about-display-line.accent { color:var(--accent-warm); font-style:italic; }
+  .about-body { font-size:14px; line-height:1.85; color:var(--text-secondary); font-weight:300; max-width:500px; margin-bottom:28px; }
+  .about-body strong { color:var(--text-primary); font-weight:500; }
+  .about-body + .about-body { margin-top:-12px; }
+  .about-section-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-bottom:16px; margin-top:36px; }
+  .about-concept-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border-rule); border-radius:8px; overflow:hidden; border:1px solid var(--border-subtle); margin-bottom:28px; }
+  .about-concept-cell { background:var(--bg-card); padding:20px 20px 18px; }
+  .about-concept-term { font-family:'Playfair Display',serif; font-size:16px; font-weight:600; font-style:italic; color:var(--text-primary); margin-bottom:8px; }
+  .about-concept-def { font-size:12px; line-height:1.65; color:var(--text-secondary); font-weight:300; }
+  .about-credits { border-top:1px solid var(--border-rule); padding-top:28px; margin-top:36px; }
+  .about-credit-row { display:flex; gap:16px; margin-bottom:12px; align-items:baseline; }
+  .about-credit-key { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); width:100px; flex-shrink:0; }
+  .about-credit-val { font-size:13px; color:var(--text-secondary); font-weight:300; }
+  .about-colophon { margin-top:36px; padding:20px 24px; background:var(--bg-inset); border-radius:8px; border:1px solid var(--border-subtle); }
+  .about-colophon-text { font-family:'Playfair Display',serif; font-size:15px; font-style:italic; font-weight:400; line-height:1.65; color:var(--text-secondary); }
+  .about-colophon-text strong { color:var(--text-primary); font-weight:600; }
+
+  /* ============================================ ECHO REGISTRY ============================================ */
+  .registry-view { padding:48px 36px 60px; }
+  .registry-pretitle { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:24px; }
+  .registry-display { margin-bottom:10px; line-height:0.88; }
+  .registry-display-line { font-family:'Playfair Display',serif; font-weight:900; color:var(--text-primary); display:block; letter-spacing:-3px; }
+  .registry-display-line.s72 { font-size:72px; }
+  .registry-display-line.s64 { font-size:64px; }
+  .registry-display-line.accent { color:var(--accent-warm); font-style:italic; }
+  .registry-subtitle { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-top:18px; }
+  .registry-rule { border:none; height:1px; background:var(--border-rule); margin:28px 0; }
+  .registry-intro { font-size:14px; line-height:1.8; color:var(--text-secondary); font-weight:300; max-width:480px; margin-bottom:32px; }
+  .registry-intro strong { color:var(--text-primary); font-weight:500; }
+  .registry-progress { margin-bottom:36px; }
+  .registry-progress-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .registry-progress-label { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); }
+  .registry-progress-count { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent-warm); letter-spacing:0.5px; }
+  .registry-progress-track { height:3px; background:var(--border-rule); border-radius:2px; overflow:hidden; }
+  .registry-progress-fill { height:100%; background:linear-gradient(90deg, var(--accent-echo), var(--accent-warm)); border-radius:2px; transition:width 0.6s cubic-bezier(0.2,0,0,1); }
+  .registry-entry { border:1px solid var(--border-subtle); border-radius:10px; margin-bottom:16px; overflow:hidden; transition:all 0.35s; }
+  .registry-entry.collected { background:var(--registry-collected-bg); border-color:var(--border-accent); }
+  .registry-entry.locked { background:var(--registry-locked-bg); }
+  .registry-entry-header { padding:18px 22px 16px; display:flex; align-items:center; gap:16px; cursor:pointer; transition:background 0.2s; }
+  .registry-entry.collected .registry-entry-header:hover { background:rgba(217,175,120,0.03); }
+  .registry-entry-number { font-family:'Playfair Display',serif; font-size:32px; font-weight:800; line-height:1; letter-spacing:-1px; min-width:40px; }
+  .registry-entry.collected .registry-entry-number { color:var(--accent-warm); }
+  .registry-entry.locked .registry-entry-number { color:var(--toc-number); }
+  .registry-entry-info { flex:1; }
+  .registry-entry-name { font-family:'Playfair Display',serif; font-size:16px; font-weight:500; color:var(--text-primary); margin-bottom:3px; letter-spacing:-0.3px; }
+  .registry-entry.locked .registry-entry-name { color:var(--text-dim); }
+  .registry-entry-meta { display:flex; gap:10px; align-items:center; }
+  .registry-entry-era { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2px; color:var(--accent-warm); background:var(--tag-bg); padding:2px 8px; border-radius:3px; }
+  .registry-entry.locked .registry-entry-era { opacity:0.3; }
+  .registry-entry-status { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2px; }
+  .registry-entry.collected .registry-entry-status { color:var(--gained-green); }
+  .registry-entry.locked .registry-entry-status { color:var(--text-faint); }
+  .registry-entry-badge { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .registry-entry.collected .registry-entry-badge { background:var(--tag-bg); border:1px solid var(--border-accent); }
+  .registry-entry.locked .registry-entry-badge { background:var(--bg-inset); border:1px solid var(--border-subtle); }
+  .registry-entry-badge svg { width:12px; height:12px; }
+  .registry-entry.collected .registry-entry-badge svg { color:var(--accent-warm); }
+  .registry-entry.locked .registry-entry-badge svg { color:var(--text-faint); }
+  .registry-echoes { max-height:0; overflow:hidden; transition:max-height 0.45s cubic-bezier(0.2,0,0,1); }
+  .registry-entry.expanded .registry-echoes { max-height:600px; }
+  .registry-echoes-inner { padding:0 22px 22px; border-top:1px solid var(--border-rule); margin:0 22px; padding-top:18px; }
+  .registry-echo-row { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; opacity:0; transform:translateY(6px); transition:opacity 0.3s, transform 0.3s; }
+  .registry-entry.expanded .registry-echo-row { opacity:1; transform:translateY(0); }
+  .registry-entry.expanded .registry-echo-row:nth-child(1) { transition-delay:0.08s; }
+  .registry-entry.expanded .registry-echo-row:nth-child(2) { transition-delay:0.14s; }
+  .registry-entry.expanded .registry-echo-row:nth-child(3) { transition-delay:0.20s; }
+  .registry-entry.expanded .registry-echo-row:nth-child(4) { transition-delay:0.26s; }
+  .registry-echo-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:6px; }
+  .registry-echo-dot.auditory { background:var(--sensory-purple); }
+  .registry-echo-dot.tactile { background:var(--sensory-teal); }
+  .registry-echo-dot.visual { background:var(--sensory-gold); }
+  .registry-echo-dot.gestural { background:var(--sensory-green); }
+  .registry-echo-type { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); width:52px; flex-shrink:0; padding-top:2px; }
+  .registry-echo-desc { font-size:12px; color:var(--text-secondary); font-weight:300; line-height:1.5; }
+  .registry-carried { margin-top:16px; position:relative; padding-left:18px; }
+  .registry-carried::before { content:''; position:absolute; left:0; top:3px; bottom:3px; width:2px; background:linear-gradient(180deg,var(--accent-warm),var(--accent-echo)); border-radius:2px; }
+  .registry-carried-label { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2.5px; color:var(--accent-warm); margin-bottom:6px; }
+  .registry-carried-text { font-family:'Playfair Display',serif; font-size:14px; font-style:italic; font-weight:400; line-height:1.55; color:var(--text-primary); letter-spacing:-0.1px; }
+  .registry-locked-hint { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:2px; color:var(--text-faint); padding:0 22px 18px; display:flex; align-items:center; gap:8px; }
+  .registry-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-rule); border-radius:8px; overflow:hidden; border:1px solid var(--border-subtle); margin-top:32px; }
+  .registry-stat-cell { background:var(--bg-card); padding:16px 14px; text-align:center; }
+  .registry-stat-big { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--number-color); letter-spacing:-1px; line-height:1; margin-bottom:4px; }
+  .registry-stat-big.accent { color:var(--accent-warm); }
+  .registry-stat-label { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); }
+
+  @keyframes echoCollected {
+    0% { opacity:0; transform:translateY(12px) scale(0.96) translateX(-50%); }
+    15% { opacity:1; transform:translateY(0) scale(1) translateX(-50%); }
+    85% { opacity:1; transform:translateY(0) scale(1) translateX(-50%); }
+    100% { opacity:0; transform:translateY(-8px) scale(0.98) translateX(-50%); }
+  }
+  .echo-toast { position:fixed; bottom:32px; left:50%; transform:translateX(-50%); background:var(--bg-card); border:1px solid var(--border-accent); border-radius:8px; padding:12px 24px; z-index:600; display:flex; align-items:center; gap:12px; box-shadow:0 12px 40px var(--shadow-card); animation:echoCollected 2.4s ease both; pointer-events:none; }
+  .echo-toast-icon { width:20px; height:20px; color:var(--accent-warm); }
+  .echo-toast-text { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--text-primary); }
+  .echo-toast-sub { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:1px; color:var(--text-dim); margin-top:2px; }
+
+  /* ============================================ RESPONSIVE ============================================ */
+  @media (max-width:768px) {
+    .overlay-panel { width:100%; }
+    .splash-display-line.s96 { font-size:56px; }
+    .splash-display-line.s88 { font-size:52px; }
+    .link-display-line.s72 { font-size:48px; }
+    .link-display-line.s64 { font-size:44px; }
+    .link-display-line.s80 { font-size:52px; }
+    .link-two-col,.change-pair,.context-grid,.about-concept-grid { grid-template-columns:1fr; }
+    .sku-card { width:240px; }
+    .sku-name-large,.sku-name-accent-large { font-size:32px; }
+    .registry-display-line.s72 { font-size:48px; }
+    .registry-display-line.s64 { font-size:44px; }
+    .about-display-line.s64 { font-size:44px; }
+    .about-display-line.s56 { font-size:40px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <div class="top-bar">
+    <div style="display:flex;align-items:baseline;">
+      <div class="project-title">Skeuomorphic <em>Echoes</em></div>
+      <span class="project-subtitle">From Atoms to Pixels</span>
+    </div>
+    <div class="nav-right">
+      <a class="nav-link active-nav" id="navTimeline" onclick="closeAllOverlays()">Timeline</a>
+      <a class="nav-link" id="navRegistry" onclick="openRegistryOverlay()">Echo Registry</a>
+      <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle theme" tabindex="0">
+        <div class="toggle-knob">
+          <div class="toggle-icon">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--bg-deep);"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--bg-deep);"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+        </div>
+      </div>
+      <button class="info-btn" onclick="openAboutOverlay()">i</button>
+    </div>
+  </div>
+
+  <!-- ERA BAR -->
+  <div class="era-bar" id="eraBar">
+    <div class="era-bar-scroll" id="eraScroll">
+      <div class="era-zone">Hand-Powered</div>
+      <div class="era-zone">Mechanical</div>
+      <div class="era-zone">Electric</div>
+      <div class="era-zone">Digital</div>
+      <div class="era-zone">Virtual</div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="main">
+    <div class="timeline-viewport" id="viewport">
+      <div class="timeline-canvas" id="canvas">
+        <div class="timeline-line">
+          <div class="era-tick" style="left:20%;"></div>
+          <div class="era-tick" style="left:40%;"></div>
+          <div class="era-tick" style="left:60%;"></div>
+          <div class="era-tick" style="left:80%;"></div>
+        </div>
+        <div class="year-marker" style="left:4%;">3000 BC</div>
+        <div class="year-marker" style="left:12%;">1400</div>
+        <div class="year-marker" style="left:22%;">1700</div>
+        <div class="year-marker" style="left:32%;">1830</div>
+        <div class="year-marker" style="left:42%;">1880</div>
+        <div class="year-marker" style="left:52%;">1920</div>
+        <div class="year-marker" style="left:62%;">1960</div>
+        <div class="year-marker" style="left:72%;">1980</div>
+        <div class="year-marker" style="left:82%;">2000</div>
+        <div class="year-marker" style="left:92%;">2020</div>
+        <div class="year-marker" style="left:97%;">Now</div>
+
+        <div class="timeline-dot active" style="left:10%;"></div><div class="stem up active" style="left:calc(10% - 0.5px);"></div>
+        <div class="timeline-dot active" style="left:30%;"></div><div class="stem down active" style="left:calc(30% - 0.5px);"></div>
+        <div class="timeline-dot active" style="left:50%;"></div><div class="stem up active" style="left:calc(50% - 0.5px);"></div>
+        <div class="timeline-dot active" style="left:72%;"></div><div class="stem down active" style="left:calc(72% - 0.5px);"></div>
+        <div class="timeline-dot active" style="left:91%;"></div><div class="stem up active" style="left:calc(91% - 0.5px);"></div>
+
+        <div class="sku-card active above" style="left:calc(10% - 150px);" onclick="openSkuOverlay(4)"><div class="sku-inner"><div class="sku-counter">Skeuomorph 05</div><div class="sku-name-large">Shopping</div><div class="sku-name-accent-large">Cart</div><div class="sku-rule"></div><div class="sku-tease">No wheels. No aisles. You're still adding to cart.</div><div class="sku-cta">Explore the chain <span>&rarr;</span></div></div></div>
+        <div class="sku-card active below" style="left:calc(30% - 150px);" onclick="openSkuOverlay(3)"><div class="sku-inner"><div class="sku-counter">Skeuomorph 04</div><div class="sku-name-large">"Hanging</div><div class="sku-name-accent-large">Up"</div><div class="sku-rule"></div><div class="sku-tease">The phone left the hook decades ago. The gesture never did.</div><div class="sku-cta">Explore the chain <span>&rarr;</span></div></div></div>
+        <div class="sku-card active above" style="left:calc(50% - 150px);" onclick="openSkuOverlay(2)"><div class="sku-inner"><div class="sku-counter">Skeuomorph 03</div><div class="sku-name-large">The</div><div class="sku-name-accent-large">Envelope</div><div class="sku-rule"></div><div class="sku-tease">Sealed, stamped, and delivered to a mailbox that doesn't exist.</div><div class="sku-cta">Explore the chain <span>&rarr;</span></div></div></div>
+        <div class="sku-card active below" style="left:calc(72% - 150px);" onclick="openSkuOverlay(1)"><div class="sku-inner"><div class="sku-counter">Skeuomorph 02</div><div class="sku-name-large">Shutter</div><div class="sku-name-accent-large">Click</div><div class="sku-rule"></div><div class="sku-tease">The mechanical mirror slap of a camera that exists only as a speaker tone.</div><div class="sku-cta">Explore the chain <span>&rarr;</span></div></div></div>
+        <div class="sku-card active above" style="left:calc(91% - 150px);" onclick="openSkuOverlay(0)"><div class="sku-inner"><div class="sku-counter">Skeuomorph 01</div><div class="sku-name-large">Onscreen</div><div class="sku-name-accent-large">Keyboard</div><div class="sku-rule"></div><div class="sku-tease">A layout designed to prevent mechanical jamming — rendered on glass with no moving parts.</div><div class="sku-cta">Explore the chain <span>&rarr;</span></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="click-hint" id="scrollHint"><span class="scroll-arrows">&larr; &rarr;</span>Scroll to explore</div>
+
+  <!-- CHAIN OVERLAY (dynamically rendered) -->
+  <div class="overlay" id="overlay" onclick="closeOverlay(event)">
+    <div class="overlay-panel" id="overlayPanel" onclick="event.stopPropagation()"></div>
+  </div>
+
+  <!-- ABOUT OVERLAY -->
+  <div class="overlay" id="aboutOverlay" onclick="closeAboutOverlay(event)">
+    <div class="overlay-panel" onclick="event.stopPropagation()">
+      <div class="overlay-header">
+        <div class="overlay-title-bar"><span class="overlay-sku-label">Info</span><span class="overlay-sku-name">About This Project</span></div>
+        <button class="close-btn" onclick="closeAboutOverlay()">&times;</button>
+      </div>
+      <div class="view-about active">
+        <div class="about-view">
+          <div class="about-pretitle">About</div>
+          <div class="about-display"><span class="about-display-line s56">Skeuomorphic</span><span class="about-display-line s64 accent">Echoes</span></div>
+          <hr class="splash-rule">
+          <p class="about-body">Every digital interface carries ghosts. The shopping cart icon on your screen has no wheels. The phone you "hang up" has no hook. The envelope in your inbox was never sealed. These are <strong>skeuomorphic echoes</strong> — design elements inherited from physical objects that no longer exist in the thing they describe.</p>
+          <p class="about-body">This project traces those echoes backward through time, link by link, to the original physical object that created them. Each <strong>skeuomorph</strong> is presented as a chain of evolutionary steps — from atom to pixel — revealing how sensory experiences like sound, touch, and gesture persist long after the technology that produced them has disappeared.</p>
+          <div class="about-section-label">Key Concepts</div>
+          <div class="about-concept-grid">
+            <div class="about-concept-cell"><div class="about-concept-term">Skeuomorph</div><div class="about-concept-def">A design element that imitates the appearance or behavior of something from a different material or era, serving no functional purpose in its new context.</div></div>
+            <div class="about-concept-cell"><div class="about-concept-term">The Echo</div><div class="about-concept-def">The specific sensory or behavioral remnant that survives in today's digital interface — the thing you can still hear, feel, or do that originated in a now-extinct object.</div></div>
+            <div class="about-concept-cell"><div class="about-concept-term">The Chain</div><div class="about-concept-def">The evolutionary sequence of objects connecting the original physical artifact to its modern digital descendant, each link passing forward some traits while losing others.</div></div>
+            <div class="about-concept-cell"><div class="about-concept-term">Echo Registry</div><div class="about-concept-def">Your personal log of collected sensory echoes — sounds, textures, gestures, and visual patterns discovered as you explore each link in a chain.</div></div>
+          </div>
+          <div class="about-section-label">How to Explore</div>
+          <p class="about-body">Begin at the <strong>Timeline</strong>. Each card represents a single skeuomorph — a modern design element with ancient roots. Click any card to open its chain and trace the echo backward through history. As you visit each link, its sensory echoes are automatically collected in your <strong>Echo Registry</strong>, building a catalog of the invisible inheritances hiding in your daily interfaces.</p>
+          <div class="about-colophon"><div class="about-colophon-text">Designed as an exercise in <strong>information architecture</strong> and <strong>editorial design for the screen</strong>. Every typeface, spacing decision, and interaction pattern was chosen to echo the materiality of the objects being described — ink on paper, metal on ribbon, light on glass.</div></div>
+          <div class="about-credits">
+            <div class="about-section-label">Colophon</div>
+            <div class="about-credit-row"><div class="about-credit-key">Display</div><div class="about-credit-val">Playfair Display — serif with editorial weight</div></div>
+            <div class="about-credit-row"><div class="about-credit-key">Body</div><div class="about-credit-val">DM Sans — humanist clarity</div></div>
+            <div class="about-credit-row"><div class="about-credit-key">Mono</div><div class="about-credit-val">JetBrains Mono — technical precision</div></div>
+            <div class="about-credit-row"><div class="about-credit-key">Palette</div><div class="about-credit-val">Warm amber on deep charcoal — ink and parchment</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTRY OVERLAY -->
+  <div class="overlay" id="registryOverlay" onclick="closeRegistryOverlay(event)">
+    <div class="overlay-panel" onclick="event.stopPropagation()">
+      <div class="overlay-header">
+        <div class="overlay-title-bar"><span class="overlay-sku-label">Collection</span><span class="overlay-sku-name">Echo Registry</span></div>
+        <button class="close-btn" onclick="closeRegistryOverlay()">&times;</button>
+      </div>
+      <div class="view-registry active">
+        <div class="registry-view">
+          <div class="registry-pretitle">Your Collection</div>
+          <div class="registry-display"><span class="registry-display-line s64">Echo</span><span class="registry-display-line s72 accent">Registry</span></div>
+          <div class="registry-subtitle">Sensory ghosts, cataloged</div>
+          <hr class="registry-rule">
+          <p class="registry-intro">Every link in a chain carries sensory echoes — sounds, textures, gestures, and visual patterns that persist across centuries. <strong>Visit a link</strong> to collect its echoes. Expand any collected entry to see what your exploration uncovered.</p>
+          <div class="registry-progress">
+            <div class="registry-progress-header">
+              <div class="registry-progress-label">Links Explored</div>
+              <div class="registry-progress-count" id="registryCount">0 / 30 collected</div>
+            </div>
+            <div class="registry-progress-track"><div class="registry-progress-fill" id="registryFill" style="width:0%;"></div></div>
+          </div>
+          <div id="registryList"></div>
+          <div class="registry-stats">
+            <div class="registry-stat-cell"><div class="registry-stat-big accent" id="registryEchoCount">0</div><div class="registry-stat-label">Echoes Found</div></div>
+            <div class="registry-stat-cell"><div class="registry-stat-big" id="registryChainsCount">0 / 5</div><div class="registry-stat-label">Chains Explored</div></div>
+            <div class="registry-stat-cell"><div class="registry-stat-big" id="registryYearSpan">&mdash;</div><div class="registry-stat-label">Years Traversed</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <!-- ==========================================
+       MASTER DATA + SCRIPT
+       ========================================== -->
+  <script>
+  // ============================================
+  // ALL SKEUOMORPH DATA
+  // ============================================
+  const SKEUOMORPHS = [
+    // ---- SKU 01: ONSCREEN KEYBOARD ----
+    {
+      id:'keyboard', number:'01', titleLines:['The','Onscreen','Keyboard'], accentLine:1,
+      subtitle:'From quill to glass',
+      intro:'The keyboard on your phone preserves a layout invented in <strong>1873</strong> to prevent metal arms from colliding inside a machine you\'ve never touched. The click you hear is fake. The keys don\'t move. Yet your thumbs know exactly where every letter is — because a typist in Milwaukee arranged them there over 150 years ago.',
+      echo:'A QWERTY layout on a flat glass screen, a haptic vibration pretending to be a keystroke, and a click sound synthesized from nothing — all ghosts of a mechanical typewriter.',
+      stats:[{big:'5,000+',label:'Years Spanned'},{big:'4',label:'Sensory Modes'},{big:'1873',label:'Year Echo Was Born'}],
+      links:[
+        {
+          name:'Quill on Parchment', tabName:'01 Quill', era:'Hand-Powered', year:'3000 BC – 1800s',
+          displayLines:[{text:'Quill on',size:'s72'},{text:'Parchment',size:'s80',accent:true}],
+          quote:{text:'A goose quill is mightier than a lion\'s claw.',attr:'— Arabic proverb'},
+          body:'For nearly five thousand years, the primary writing instrument was a feather. Goose, swan, or crow quills were carefully trimmed to a point, split at the tip to create a channel for ink, and dragged across animal skin stretched thin enough to write on. Every letter was a physical negotiation between hand pressure, ink viscosity, and the absorbency of the surface.',
+          meta:[{k:'Origin',v:'Ancient Egypt, Mesopotamia'},{k:'Materials',v:'Goose feather shaft, iron gall ink, prepared animal skin (vellum)'},{k:'Lifespan',v:'A quill tip lasted approximately one week of daily use'},{k:'Preparation',v:'Curing, hardening in hot sand, careful splitting of the nib'},{k:'Status',v:'Extinct as functional tool — ceremonial use only'}],
+          numbers:[{big:'5,000',unit:'Years of Use'},{big:'~20',unit:'Words per Minute'},{big:'1',unit:'Week per Quill'}],
+          context:[{l:'Who Used It',v:'Monks, scribes, scholars, merchants, royal clerks'},{l:'Where',v:'Scriptoriums, courts, counting houses, private studies'},{l:'Skill Required',v:'Years of apprenticeship; penmanship was a professional trade'},{l:'Body Posture',v:'Seated upright, arm elevated, wrist locked at angle'},{l:'Cultural Significance',v:'Writing was power — literacy was restricted, and the scribe class held enormous influence. The quill was the instrument of law, religion, and commerce.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Scratch of quill tip on vellum, the wet drag of fresh ink'},{cls:'tactile',type:'Touch',desc:'Feather shaft between fingers, angled grip, pressure to split the nib'},{cls:'visual',type:'Sight',desc:'Ink pooling at the start of each stroke, visible line-width variation'},{cls:'gestural',type:'Gesture',desc:'Dipping into the inkwell every few words, blotting excess'}],
+          gained:'The ability to record language permanently. Externalized memory. Portable thought.',
+          lost:'Nothing — this is the origin point. But it replaced oral tradition, and with writing came the slow erosion of feats of memorization.',
+          carried:'The act of writing by hand — pressure, angle, and the irreversible commitment of ink to surface. Every stroke is a decision.',
+          footnote:'The word "pen" comes from the Latin penna, meaning feather. We still call them pens even though no feather has been involved for over a century.'
+        },
+        {
+          name:'Steel Nib Pen', tabName:'02 Nib Pen', era:'Hand-Powered', year:'1820s – 1960s',
+          displayLines:[{text:'Steel',size:'s72'},{text:'Nib Pen',size:'s80',accent:true}],
+          quote:{text:'The pen is the tongue of the mind.',attr:'— Miguel de Cervantes'},
+          body:'The steel nib replaced the organic quill with a manufactured point — mass-produced, interchangeable, and consistent. For the first time, the writing instrument was <strong>modular</strong>: a holder that lasted years paired with disposable nibs that could be swapped for different line weights. Writing was no longer dependent on finding and preparing a good feather.',
+          meta:[{k:'Inventor',v:'John Mitchell (mass production), Joseph Gillott'},{k:'Origin',v:'Birmingham, England — the steel pen capital'},{k:'Materials',v:'Tempered steel nib, wooden or vulcanite holder, bottled ink'},{k:'Innovation',v:'Mass production of consistent, interchangeable nibs'},{k:'Status',v:'Niche — calligraphy and art supply'}],
+          numbers:[{big:'50+',unit:'Nib Varieties'},{big:'~25',unit:'Words per Minute'},{big:'1830',unit:'Mass Production Begins'}],
+          context:[{l:'Who Used It',v:'Clerks, students, authors, illustrators, postal workers'},{l:'Where',v:'Schools, offices, post offices, homes — writing democratized'},{l:'Skill Required',v:'Still significant — italic hand, copperplate, and business hand were taught formally'},{l:'Body Posture',v:'Similar to quill but more relaxed; the nib did more of the work'},{l:'Cultural Significance',v:'The steel pen democratized writing. Cheap nibs meant schoolchildren could learn penmanship, and correspondence became a middle-class habit.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Finer, sharper scratch than quill; metallic whisper on paper'},{cls:'tactile',type:'Touch',desc:'Cool metal holder, interchangeable nib tips, controlled pressure'},{cls:'visual',type:'Sight',desc:'Precise hairline-to-swell strokes, nib flexibility visible in letterforms'},{cls:'gestural',type:'Gesture',desc:'Still dipping, but less often; the pen became an extension of the hand'}],
+          gained:'Consistency. Modularity. Affordability. Writing became accessible to ordinary people, not just professional scribes.',
+          lost:'The organic warmth of the quill. The ritual of preparing your own instrument. The feather\'s natural flex, which gave early writing its calligraphic character.',
+          carried:'Standardized point sizes, replaceable components, and the idea that the writing instrument is modular — not grown, but manufactured.',
+          footnote:'Birmingham produced over half the world\'s steel pen nibs by the 1850s, earning it the nickname "the city of a thousand trades."'
+        },
+        {
+          name:'The Manual Typewriter', tabName:'03 Typewriter', era:'Mechanical', year:'1873 – 1960s',
+          displayLines:[{text:'The',size:'s72'},{text:'Manual',size:'s80',accent:true},{text:'Typewriter',size:'s64'}],
+          quote:{text:'The type-writer is especially useful to literary men, clergymen, and all who desire to escape the drudgery of the pen.',attr:'— Remington & Sons advertisement, 1875'},
+          body:'The first commercially successful typewriter introduced the <strong>QWERTY layout</strong> — keys arranged specifically to prevent neighboring typebars from jamming when struck in quick succession. Each keystroke sent a metal arm swinging upward to stamp an inked ribbon against paper, producing a sharp mechanical clack that would echo through offices for nearly a century.',
+          meta:[{k:'Inventor',v:'Christopher Latham Sholes'},{k:'Origin',v:'Milwaukee, Wisconsin, USA'},{k:'Manufacturer',v:'E. Remington & Sons'},{k:'Materials',v:'Cast iron frame, steel typebars, inked fabric ribbon, paper platen'},{k:'Cost at Launch',v:'$125 (~$3,200 adjusted)'},{k:'Status',v:'Extinct — rare collector item'}],
+          numbers:[{big:'87',unit:'Years of Dominance'},{big:'~60',unit:'Words per Minute'},{big:'42',unit:'Keys on Original'}],
+          context:[{l:'Who Used It',v:'Secretaries, journalists, authors, legal clerks, office workers'},{l:'Where',v:'Offices, newsrooms, law firms, home studies'},{l:'Skill Required',v:'Touch typing — a trained profession, often 6+ months of practice'},{l:'Body Posture',v:'Seated upright, both hands on home row, eyes on copy'},{l:'Cultural Significance',v:'The typewriter opened professional writing to women, creating the role of the typist and reshaping the office workforce. By 1910, over 80% of typists in the US were women.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Mechanical clack of typebar striking ribbon and platen, carriage return bell'},{cls:'tactile',type:'Touch',desc:'Heavy key resistance (~60g force), full finger travel, lever pull for carriage return'},{cls:'visual',type:'Sight',desc:'QWERTY layout, circular glass-topped keycaps, visible typebar basket'},{cls:'gestural',type:'Gesture',desc:'Reaching to slap the carriage return lever at the end of each line'}],
+          gained:'Standardized, repeatable letterforms. Speed increased from ~20 wpm to ~60 wpm. Multiple carbon copies possible. QWERTY created a universal input standard.',
+          lost:'The individuality of handwriting. Personal character in letterforms. The ability to sketch or annotate in margins. Silence — the typewriter introduced noise as a byproduct of writing.',
+          carried:'The QWERTY layout, the satisfying click of each keystroke, the carriage return (now the Enter key), and the idea that typing is a deliberate one-character-at-a-time act. This is the link where the echo is born.',
+          footnote:'The word "typewriter" can be typed entirely on the top row of a QWERTY keyboard — likely a deliberate trick by early salesmen demonstrating the machine.'
+        },
+        {
+          name:'The Electric Typewriter', tabName:'04 Electric', era:'Electric', year:'1930s – 1980s',
+          displayLines:[{text:'The',size:'s72'},{text:'Electric',size:'s80',accent:true},{text:'Typewriter',size:'s64'}],
+          quote:{text:'The IBM Selectric made typing feel effortless. It was the machine that made the machine disappear.',attr:'— Design historian John Harwood'},
+          body:'The electric typewriter replaced brute-force finger power with a motor. IBM\'s <strong>Selectric</strong> replaced the entire typebar mechanism with a single rotating golf ball element, eliminating jams entirely. Keys became feather-light. The carriage return became a button press. For the first time, the act of typing felt <em>easy</em>.',
+          meta:[{k:'Key Model',v:'IBM Selectric (1961)'},{k:'Origin',v:'Lexington, Kentucky, USA'},{k:'Innovation',v:'Golf ball element — single rotating type head replaces typebar basket'},{k:'Materials',v:'Plastic housing, electric motor, ribbon cartridge'},{k:'Cost',v:'$450 (~$4,500 adjusted)'},{k:'Status',v:'Extinct — some still in use by novelists'}],
+          numbers:[{big:'13M',unit:'Selectrics Sold'},{big:'~90',unit:'Words per Minute'},{big:'96',unit:'Characters per Element'}],
+          context:[{l:'Who Used It',v:'Office professionals, executives, authors, government agencies'},{l:'Where',v:'Corporate offices, typing pools, newsrooms, home offices'},{l:'Skill Required',v:'Much less — light touch meant less fatigue, faster training'},{l:'Body Posture',v:'More relaxed; the machine did the striking, you just triggered it'},{l:'Cultural Significance',v:'The Selectric became a status symbol in offices. Its interchangeable font balls let a single typist produce documents in multiple typefaces — desktop publishing before the term existed.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Softer, motorized hum; rapid-fire ball or daisy wheel strikes'},{cls:'tactile',type:'Touch',desc:'Light touch activation (~25g), powered key return, effortless repetition'},{cls:'visual',type:'Sight',desc:'Proportional spacing, correction ribbon, Selectric\'s golf ball element'},{cls:'gestural',type:'Gesture',desc:'Automatic carriage return — the lever pull reduced to a key press'}],
+          gained:'Speed without effort. Proportional spacing. Interchangeable typefaces. Correction ribbon (the first "undo"). Near-silent operation compared to manual.',
+          lost:'The full-body engagement of manual typing. The satisfying resistance and percussive feedback. The mechanical honesty — with electric, the connection between finger and letter became indirect.',
+          carried:'Light-touch keys, automatic line returns, and the expectation that the machine does the heavy work — you only supply the intention.',
+          footnote:'The Selectric\'s golf ball could be swapped in seconds, letting typists switch between fonts mid-document — a capability that wouldn\'t return until word processors arrived decades later.'
+        },
+        {
+          name:'The Computer Keyboard', tabName:'05 Keyboard', era:'Digital', year:'1970s – Present',
+          displayLines:[{text:'Computer',size:'s72'},{text:'Keyboard',size:'s80',accent:true}],
+          quote:{text:'The keyboard is the last physical object standing between you and pure thought made digital.',attr:'— Interface design maxim'},
+          body:'When computers needed human input, engineers didn\'t invent something new — they bolted a typewriter keyboard onto a terminal. The <strong>QWERTY layout survived intact</strong>, even though there were no typebars to jam. Mechanical switches replaced the typewriter\'s action but deliberately preserved tactile feedback and audible clicks.',
+          meta:[{k:'Key Innovation',v:'Electronic switch replaces mechanical typebar — keystrokes become electrical signals'},{k:'Origin',v:'Derived from Teletype terminals (1960s), standardized on IBM PC (1981)'},{k:'Materials',v:'Plastic keycaps, mechanical or membrane switches, PCB, USB/PS2 cable'},{k:'Variants',v:'Mechanical (Cherry MX), membrane, scissor, capacitive'},{k:'Status',v:'Thriving — billions in daily use worldwide'}],
+          numbers:[{big:'~100',unit:'Keys Standard'},{big:'~120',unit:'WPM Record Typist'},{big:'1981',unit:'IBM PC Keyboard'}],
+          context:[{l:'Who Used It',v:'Everyone — from programmers to children to grandparents'},{l:'Where',v:'Desks, laps, standing desks — anywhere with a screen'},{l:'Skill Required',v:'Highly variable — hunt-and-peck to 120+ WPM touch typists'},{l:'Body Posture',v:'All ten fingers on home row, Ctrl+Z to undo'},{l:'Cultural Significance',v:'The computer keyboard is the most widely used human-machine interface in history. It preserved QWERTY not out of necessity but out of sheer cultural inertia — billions of trained fingers.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Mechanical switch click (Cherry MX), or muted membrane press'},{cls:'tactile',type:'Touch',desc:'Spring resistance, tactile bump at actuation point, keycap texture'},{cls:'visual',type:'Sight',desc:'QWERTY preserved exactly, backlit legends, function row, modifier keys'},{cls:'gestural',type:'Gesture',desc:'All ten fingers on home row, Ctrl+Z to undo (no more correction ribbon)'}],
+          gained:'Infinite undo. Copy/paste. Text editing without retyping. The delete key. The cursor. Every keystroke became editable, reversible, and impermanent.',
+          lost:'The permanence of typed text. The commitment of each keystroke. The physical document — screens replaced paper as the primary destination of typed words.',
+          carried:'The full QWERTY layout, the physical key as input unit, and the myth that typing speed correlates with productivity.',
+          footnote:'The mechanical keyboard community has revived interest in switch types, keycap materials, and sound profiles — essentially optimizing the sensory experience of a 150-year-old layout.'
+        },
+        {
+          name:'The Onscreen Keyboard', tabName:'06 Onscreen', era:'Virtual', year:'2007 – Present',
+          displayLines:[{text:'The',size:'s72'},{text:'Onscreen',size:'s80',accent:true},{text:'Keyboard',size:'s64'}],
+          quote:{text:'We\'re going to use a pointing device that we\'re all born with — our fingers.',attr:'— Steve Jobs, iPhone keynote, 2007'},
+          body:'When Apple removed the physical keyboard from the iPhone in 2007, they faced a design problem: people expected keys. So they drew them on glass. The <strong>QWERTY layout was preserved pixel-for-pixel</strong>. A haptic motor simulated the feel of a press. A speaker played a synthetic click. Every sensory element of the physical keyboard was faked.',
+          meta:[{k:'Key Innovation',v:'Capacitive multi-touch glass replaces physical keys entirely'},{k:'Origin',v:'Apple iPhone, Cupertino, California, 2007'},{k:'Materials',v:'Gorilla Glass, capacitive touch sensor, haptic motor, tiny speaker'},{k:'Typing Method',v:'Two thumbs on glass, autocorrect compensating for imprecision'},{k:'Status',v:'Dominant — the primary keyboard for billions of people'}],
+          numbers:[{big:'6.8B',unit:'Smartphones Worldwide'},{big:'~40',unit:'WPM on Glass'},{big:'2007',unit:'iPhone Launch'}],
+          context:[{l:'Who Used It',v:'Nearly every smartphone owner on Earth'},{l:'Where',v:'Everywhere — pockets, beds, bathrooms, commutes'},{l:'Skill Required',v:'Almost none — autocorrect does the precision work'},{l:'Body Posture',v:'Two thumbs, head bowed, shoulders hunched — the prayer pose of the 21st century'},{l:'Cultural Significance',v:'The onscreen keyboard completed the keyboard\'s journey from specialized tool to universal human interface. It preserved every skeuomorphic echo — QWERTY, the click, the key shape — while removing every physical component that created them.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Synthesized click — a speaker playing a recording of a key that doesn\'t exist'},{cls:'tactile',type:'Touch',desc:'Haptic vibration simulating key depression on a flat glass surface'},{cls:'visual',type:'Sight',desc:'QWERTY layout rendered as pixels, key "press" animations, pop-up letter preview'},{cls:'gestural',type:'Gesture',desc:'Two-thumb typing on glass — the ghost of a posture invented for a mechanical machine'}],
+          gained:'A keyboard that appears only when needed and vanishes when it doesn\'t. Multilingual switching. Swipe typing. Emoji. The keyboard became software.',
+          lost:'All genuine tactile feedback. The real click. The physical home row. The ability to type without looking. Speed — glass typing is roughly 40% slower than physical keyboards.',
+          carried:'Everything. The layout. The click. The key shape. The muscle memory. 150 years of accumulated habit, preserved in light on glass.',
+          footnote:'If you turn off haptic feedback and keyboard sounds on your phone, you\'ll notice how strange it feels — your fingers expect resistance and confirmation that simply isn\'t there.'
+        }
+      ]
+    },
+    // ---- SKU 02: SHUTTER CLICK ----
+    {
+      id:'shutter', number:'02', titleLines:['Shutter','Click'], accentLine:1,
+      subtitle:'From dark room to bright screen',
+      intro:'Your phone plays a fake shutter sound when you take a photo. It\'s mimicking the <strong>mirror slap</strong> of a single-lens reflex camera — a mechanical event caused by a mirror flipping out of the light path. Your phone has no mirror. No shutter. No film. But it still goes <em>click</em>.',
+      echo:'A synthesized shutter sound, a simulated aperture animation, and the word "shoot" — all remnants of a mechanical process that hasn\'t existed in your camera for years.',
+      stats:[{big:'200',label:'Years of Photography'},{big:'3',label:'Sensory Modes'},{big:'1861',label:'First SLR Patent'}],
+      links:[
+        {
+          name:'Camera Obscura', tabName:'01 Obscura', era:'Hand-Powered', year:'500 BC – 1800s',
+          displayLines:[{text:'Camera',size:'s72'},{text:'Obscura',size:'s80',accent:true}],
+          quote:{text:'Light, admitted through a small hole, will project upon the opposite wall an inverted image of the outside world.',attr:'— Alhazen (Ibn al-Haytham), c. 1020 AD'},
+          body:'The camera obscura is not a camera — it\'s a <strong>dark room</strong>. Literally: "camera" means room, "obscura" means dark. A pinhole in one wall projects an inverted image of the outside onto the opposite surface. For centuries, artists used this projection as a tracing aid. No film, no shutter, no capture — just light performing a magic trick.',
+          meta:[{k:'Origin',v:'Described by Mozi (China, 400 BC), Aristotle, Alhazen'},{k:'Materials',v:'A darkened room or box with a small aperture'},{k:'Function',v:'Optical projection for tracing and observation'},{k:'Key Principle',v:'Light travels in straight lines through a small opening'},{k:'Status',v:'Extinct as tool — principle still underlies all cameras'}],
+          numbers:[{big:'2,000+',unit:'Years Known'},{big:'0',unit:'Images Captured'},{big:'1',unit:'Pinhole Required'}],
+          context:[{l:'Who Used It',v:'Astronomers, artists (Vermeer, Canaletto suspected), natural philosophers'},{l:'Where',v:'Studios, observatories, portable boxes carried to landscapes'},{l:'Skill Required',v:'Understanding of optics; artistic skill to trace the projected image'},{l:'Body Posture',v:'Hunched in darkness, tracing with charcoal or pencil'},{l:'Cultural Significance',v:'The camera obscura proved that images could be created by light alone — no human hand required. This insight would take 800 more years to become photography.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Silence — the camera obscura makes no sound at all'},{cls:'tactile',type:'Touch',desc:'The darkness of the room itself; the artist\'s hand tracing light'},{cls:'visual',type:'Sight',desc:'An inverted, full-color projection — vivid but uncapturable'},{cls:'gestural',type:'Gesture',desc:'Peering through darkness, adjusting the aperture by hand'}],
+          gained:'The discovery that light itself can create images without human drawing.',
+          lost:'Nothing — this is the origin point. But by showing that images could form automatically, it planted the seed that would eventually make hand-drawn accuracy less essential.',
+          carried:'The word "camera." The concept of aperture. The dark chamber that all cameras still contain. And the fundamental principle: control light, capture reality.',
+          footnote:'The camera obscura may have been Renaissance painting\'s secret weapon. David Hockney\'s "Secret Knowledge" thesis argues that many Old Masters used optical aids to achieve their startling realism.'
+        },
+        {
+          name:'The Daguerreotype', tabName:'02 Daguerreo.', era:'Mechanical', year:'1839 – 1860s',
+          displayLines:[{text:'The',size:'s72'},{text:'Daguerreotype',size:'s64',accent:true}],
+          quote:{text:'I have seized the light. I have arrested its flight.',attr:'— Louis Daguerre, 1839'},
+          body:'Louis Daguerre achieved what the camera obscura could not: <strong>permanence</strong>. His process exposed a silver-coated copper plate to light, then developed it with mercury vapor, fixing the image chemically. For the first time, light itself drew a picture that lasted. Each daguerreotype was unique — a one-of-a-kind mirror-image on metal.',
+          meta:[{k:'Inventor',v:'Louis-Jacques-Mandé Daguerre'},{k:'Origin',v:'Paris, France'},{k:'Materials',v:'Polished silver-plated copper, mercury vapor, iodine sensitizer'},{k:'Exposure Time',v:'3–15 minutes in direct sunlight (early); later under a minute'},{k:'Status',v:'Extinct — museum pieces and collector items'}],
+          numbers:[{big:'1839',unit:'Year Announced'},{big:'3–15',unit:'Minutes Exposure'},{big:'1',unit:'Unique Copy per Image'}],
+          context:[{l:'Who Used It',v:'Professional portrait studios, wealthy patrons, scientists'},{l:'Where',v:'Studios with skylights, rooftops, eventually mobile wagons'},{l:'Skill Required',v:'Chemistry knowledge, precise timing, handling toxic mercury vapor'},{l:'Body Posture',v:'The subject had to sit perfectly still for minutes — head clamps were common'},{l:'Cultural Significance',v:'The daguerreotype created the portrait industry. For the first time, ordinary people could see their own face accurately — not painted, not imagined, but captured by light. It democratized the portrait.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The lens cap removed and replaced — the first "shutter" was a hand lifting a cover'},{cls:'tactile',type:'Touch',desc:'The cold metal plate, the chemical smell of mercury and iodine'},{cls:'visual',type:'Sight',desc:'A mirror-like silver surface that reveals the image only at certain angles'},{cls:'gestural',type:'Gesture',desc:'Removing and replacing the lens cap by hand to control exposure'}],
+          gained:'Permanent capture of light. The photograph. Proof that a moment could be preserved forever.',
+          lost:'Speed. Spontaneity. Each image required minutes of stillness. The photographer became part chemist, part artist, part technician.',
+          carried:'The idea that photography means chemical/physical capture of light. The portrait session. And the first gesture of exposure control — covering and uncovering the lens.',
+          footnote:'The daguerreotype is so reflective that you must tilt it to see the image — it literally works like a mirror that remembers.'
+        },
+        {
+          name:'Bellows Plate Camera', tabName:'03 Bellows', era:'Mechanical', year:'1850s – 1930s',
+          displayLines:[{text:'Bellows',size:'s72'},{text:'Plate',size:'s80',accent:true},{text:'Camera',size:'s64'}],
+          quote:{text:'You press the button, we do the rest.',attr:'— George Eastman, Kodak slogan, 1888'},
+          body:'The bellows camera introduced the <strong>mechanical shutter</strong> — a spring-loaded blade that opened and closed with a distinctive click-snap. For the first time, exposure was controlled by a mechanism, not a human hand removing a lens cap. Glass plate negatives replaced unique metal plates, enabling <strong>multiple prints</strong> from a single exposure.',
+          meta:[{k:'Innovation',v:'Mechanical shutter, glass plate negatives, bellows focusing'},{k:'Origin',v:'Various European and American makers'},{k:'Materials',v:'Mahogany body, leather bellows, brass lens, glass plates'},{k:'Shutter Type',v:'Leaf shutter or focal plane shutter — spring-loaded blades'},{k:'Status',v:'Extinct — large format photography is a niche art form'}],
+          numbers:[{big:'1/25',unit:'Sec. Shutter Speed'},{big:'4×5"',unit:'Plate Size'},{big:'1888',unit:'Kodak Launches'}],
+          context:[{l:'Who Used It',v:'Professional photographers, photojournalists, portrait studios'},{l:'Where',v:'Studios, battlefields (Civil War), landscapes, newsrooms'},{l:'Skill Required',v:'Significant — loading plates in darkness, manual focus, exposure calculation'},{l:'Body Posture',v:'Hunched under a dark cloth, composing on a ground glass screen'},{l:'Cultural Significance',v:'The bellows camera made photography portable and reproducible. Negatives meant sharing. The mechanical shutter gave photographers split-second control — and created the CLICK.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The first true shutter click — a spring-loaded snap of metal blades'},{cls:'tactile',type:'Touch',desc:'The squeeze of a rubber bulb or cable release; loading glass plates in the dark'},{cls:'visual',type:'Sight',desc:'The upside-down image on ground glass; the accordion fold of leather bellows'},{cls:'gestural',type:'Gesture',desc:'Ducking under the dark cloth to compose, squeezing the shutter release'}],
+          gained:'The mechanical shutter — and its sound. Reproducible negatives. Portable photography. The "decisive moment" became possible.',
+          lost:'The unique, precious quality of the daguerreotype. Each image was no longer singular. Photography began its journey from rare art to ubiquitous medium.',
+          carried:'The shutter click. The concept of "taking a shot." The viewfinder. The idea that a photograph is captured in an instant, not over minutes.',
+          footnote:'The earliest shutters were so slow that photographers still had to tell subjects to hold still — the phrase "watch the birdie" comes from this era of enforced patience.'
+        },
+        {
+          name:'The 35mm SLR', tabName:'04 Film SLR', era:'Mechanical', year:'1936 – 2000s',
+          displayLines:[{text:'The 35mm',size:'s72'},{text:'SLR',size:'s80',accent:true}],
+          quote:{text:'The camera is an instrument that teaches people how to see without a camera.',attr:'— Dorothea Lange'},
+          body:'The single-lens reflex camera added a <strong>mirror</strong> between the lens and the film. When you looked through the viewfinder, you saw exactly what the lens saw. When you pressed the shutter, the mirror flipped up with a satisfying mechanical <em>CLACK</em>, the shutter curtain opened, and light hit the film. That mirror slap is the sound your phone is imitating.',
+          meta:[{k:'Key Model',v:'Nikon F (1959), Canon AE-1 (1976)'},{k:'Innovation',v:'Reflex mirror for through-the-lens viewing; mirror slap on exposure'},{k:'Film',v:'35mm cellulose acetate roll, 24 or 36 exposures'},{k:'Shutter',v:'Focal plane curtain — two blinds racing across the film gate'},{k:'Status',v:'Niche — film photography has a dedicated revival community'}],
+          numbers:[{big:'36',unit:'Shots per Roll'},{big:'1/1000',unit:'Sec. Shutter Speed'},{big:'850M',unit:'Film Cameras Made'}],
+          context:[{l:'Who Used It',v:'Everyone — from photojournalists to tourists to art students'},{l:'Where',v:'Warzones, weddings, family vacations, studios, nature'},{l:'Skill Required',v:'Moderate — auto-exposure reduced the learning curve dramatically'},{l:'Body Posture',v:'Camera raised to eye, left hand cradling lens, right finger on shutter'},{l:'Cultural Significance',v:'The SLR put professional-quality photography in the hands of amateurs. It created the modern visual culture of the 20th century — from National Geographic to family albums.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The mirror slap — a sharp mechanical CLACK as the reflex mirror flips upward'},{cls:'tactile',type:'Touch',desc:'The firm half-press to focus, the decisive full-press to shoot, film advance lever'},{cls:'visual',type:'Sight',desc:'Through-the-lens optical viewfinder — you see exactly what the film sees'},{cls:'gestural',type:'Gesture',desc:'Advancing the film lever after each shot; the ritual of rewinding a finished roll'}],
+          gained:'What-you-see-is-what-you-get framing. The decisive mirror slap sound. Interchangeable lenses. Photography became intuitive and immediate.',
+          lost:'The careful, contemplative pace of large format. With 36 shots per roll, photographers began shooting more and thinking less. The spray-and-pray era had begun.',
+          carried:'The mirror slap sound. The two-stage shutter release (half-press to focus). The posture of raising a camera to your eye. The concept of "shooting."',
+          footnote:'Japan\'s dominance in SLR manufacturing (Nikon, Canon, Pentax, Olympus) was so complete that "Japanese camera" became virtually synonymous with "good camera" by the 1970s.'
+        },
+        {
+          name:'The Digital SLR', tabName:'05 DSLR', era:'Digital', year:'1999 – Present',
+          displayLines:[{text:'Digital',size:'s72'},{text:'SLR',size:'s80',accent:true}],
+          quote:{text:'Digital photography made everyone a photographer. Whether that\'s a good thing depends on who you ask.',attr:'— David duChemin'},
+          body:'The DSLR replaced film with a sensor but kept <strong>everything else</strong> — the mirror, the optical viewfinder, the mechanical shutter, and crucially, the sound. Early DSLRs were designed to feel and sound like film SLRs because photographers expected it. The mirror slap was a feature, not a bug.',
+          meta:[{k:'Key Model',v:'Nikon D1 (1999), Canon EOS 5D (2005)'},{k:'Innovation',v:'Digital sensor replaces film; image review on LCD; infinite "rolls"'},{k:'Sensor',v:'CCD then CMOS; full-frame or APS-C crop'},{k:'Storage',v:'CompactFlash, then SD cards — thousands of images per card'},{k:'Status',v:'Declining — being replaced by mirrorless cameras'}],
+          numbers:[{big:'∞',unit:'Shots per Card'},{big:'1/8000',unit:'Sec. Shutter Speed'},{big:'1999',unit:'First Pro DSLR'}],
+          context:[{l:'Who Used It',v:'Professional photographers, serious amateurs, photojournalists'},{l:'Where',v:'Everywhere film SLRs were used — plus instant sharing enabled new contexts'},{l:'Skill Required',v:'Similar to film SLR, but instant review and infinite retakes lowered consequences'},{l:'Body Posture',v:'Identical to film SLR — eye to viewfinder, left hand on lens'},{l:'Cultural Significance',v:'The DSLR was a bridge — it preserved every physical ritual of film photography while eliminating film\'s costs and limitations. It trained a generation to expect the mirror sound.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Identical mirror slap to film SLR — same mechanism, same satisfying clack'},{cls:'tactile',type:'Touch',desc:'Same body, same shutter button feel, same lens ring; now with a "chimping" reflex (checking LCD after every shot)'},{cls:'visual',type:'Sight',desc:'Optical viewfinder preserved; LCD screen added for review'},{cls:'gestural',type:'Gesture',desc:'Chimping — the new gesture of reviewing shots on the back screen after each capture'}],
+          gained:'Infinite exposures. Instant review. No development costs. ISO adjustment per shot. Metadata embedded in every image.',
+          lost:'The discipline of limited frames. The anticipation of development. The physicality of negatives and contact sheets. The deliberateness that scarcity imposed.',
+          carried:'The mirror slap sound (now unnecessary but expected). The shutter button ritual. The entire physical form factor of the camera.',
+          footnote:'Modern mirrorless cameras have removed the mirror entirely — yet many include a simulated shutter sound by default, because silence feels wrong to photographers trained on SLRs.'
+        },
+        {
+          name:'The Smartphone Camera', tabName:'06 Phone', era:'Virtual', year:'2007 – Present',
+          displayLines:[{text:'Smartphone',size:'s72'},{text:'Camera',size:'s80',accent:true}],
+          quote:{text:'The best camera is the one that\'s with you.',attr:'— Chase Jarvis, photographer'},
+          body:'Your phone has no mirror, no mechanical shutter, no film, and no viewfinder. It\'s a flat glass rectangle. Yet when you press the shutter button, it plays a <strong>synthesized click</strong> — often modeled on the Nikon F or Canon AE-1. Some phones even animate a faux aperture closing. The entire sensory experience of 200 years of photography is being faked.',
+          meta:[{k:'Key Innovation',v:'Computational photography; no mechanical shutter; synthesized feedback'},{k:'Milestone',v:'iPhone (2007), iPhone 4 (2010 — front camera), iPhone 7+ (2016 — portrait mode)'},{k:'Sensor',v:'Tiny CMOS sensor with computational multi-frame processing'},{k:'Shutter',v:'Electronic rolling shutter — no physical mechanism at all'},{k:'Status',v:'Dominant — more photos taken on phones than all other cameras combined'}],
+          numbers:[{big:'1.4T',unit:'Photos Taken/Year'},{big:'0',unit:'Moving Parts'},{big:'2007',unit:'iPhone Launch'}],
+          context:[{l:'Who Used It',v:'Virtually every person with a smartphone — billions daily'},{l:'Where',v:'Everywhere, all the time — meals, concerts, mirrors, commutes'},{l:'Skill Required',v:'None — point and tap; computational photography handles the rest'},{l:'Body Posture',v:'Arms extended, phone held at face height — or one-handed selfie grip'},{l:'Cultural Significance',v:'The smartphone camera made photography truly universal. The shutter sound it plays is a ghost — a cultural memory of a mechanical process that hasn\'t occurred inside this device, ever.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'A synthesized shutter click played through a speaker — the ghost of a mirror slap'},{cls:'tactile',type:'Touch',desc:'Tapping glass; some phones add haptic pulse to simulate shutter release'},{cls:'visual',type:'Sight',desc:'Animated shutter/aperture closing effect; live preview replaces viewfinder'},{cls:'gestural',type:'Gesture',desc:'Tapping a circle on glass — the distant descendant of squeezing a cable release'}],
+          gained:'A camera in every pocket. No cost per image. Instant sharing. Computational magic (HDR, night mode, portrait blur).',
+          lost:'Every genuine sensory element of photography. The click is fake. The shutter is simulated. The viewfinder is a screen. The "film" is invisible. Only the word "shoot" remains.',
+          carried:'Everything. The shutter sound. The aperture icon. The concept of "shooting." The frame. The word "camera" (still meaning "dark room"). 200 years of sensory habits, preserved as software.',
+          footnote:'In Japan and South Korea, phone cameras are legally required to play a shutter sound — not for nostalgia, but to prevent covert photography. The skeuomorph became law.'
+        }
+      ]
+    },
+    // ---- SKU 03: THE ENVELOPE ----
+    {
+      id:'envelope', number:'03', titleLines:['The','Envelope'], accentLine:1,
+      subtitle:'From wax seal to inbox icon',
+      intro:'The envelope icon in your email app depicts a folded paper container with a triangular flap — an object you may never have actually mailed. You "open" messages, check your "inbox," and "attach" files with a paperclip icon. Every metaphor is borrowed from a <strong>postal system</strong> that predates the internet by centuries.',
+      echo:'A sealed envelope icon, an "inbox" tray, a paperclip attachment symbol, and the word "mail" itself — all ghosts of a physical postal system.',
+      stats:[{big:'4,000+',label:'Years of Post'},{big:'4',label:'Sensory Modes'},{big:'1971',label:'First Email Sent'}],
+      links:[
+        {
+          name:'Clay Tablet & Seal', tabName:'01 Clay', era:'Hand-Powered', year:'3500 BC – 500 BC',
+          displayLines:[{text:'Clay Tablet',size:'s72'},{text:'& Seal',size:'s80',accent:true}],
+          quote:{text:'Let the message be sealed so that none but the intended may read it.',attr:'— Sumerian administrative text, c. 2000 BC'},
+          body:'Before paper, before envelopes, messages were pressed into wet clay with a reed stylus. For private messages, the tablet was encased in a <strong>clay envelope</strong> — a second layer of clay wrapped around the first, sealed with a cylinder seal rolled across the surface. To read the message, you had to <em>break</em> the outer shell.',
+          meta:[{k:'Origin',v:'Sumer, Mesopotamia (modern Iraq)'},{k:'Materials',v:'Wet clay, reed stylus, cylinder seal carved from stone'},{k:'Security',v:'Clay envelope + cylinder seal impression = tamper-proof'},{k:'Delivery',v:'Royal messengers, trade caravan networks'},{k:'Status',v:'Extinct — archaeological artifacts only'}],
+          numbers:[{big:'3500',unit:'BC – First Tablets'},{big:'500K+',unit:'Tablets Discovered'},{big:'1',unit:'Read = Destroyed'}],
+          context:[{l:'Who Used It',v:'Kings, priests, merchants, administrators'},{l:'Where',v:'Palaces, temples, storehouses, trade routes'},{l:'Skill Required',v:'Scribal training (cuneiform) — a specialized profession'},{l:'Body Posture',v:'Seated cross-legged, tablet in palm, stylus in dominant hand'},{l:'Cultural Significance',v:'The clay envelope is the oldest known privacy technology. The concept of sealing a message so only the recipient can read it — the foundation of all secure communication.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The crack of breaking the clay envelope to read the message inside'},{cls:'tactile',type:'Touch',desc:'Wet clay shaped in hands; the weight of the sealed tablet'},{cls:'visual',type:'Sight',desc:'Cylinder seal impressions — ornate rolling patterns proving authenticity'},{cls:'gestural',type:'Gesture',desc:'Pressing the seal into clay; breaking the envelope open to read'}],
+          gained:'Private, authenticated messaging. The sender\'s identity was verified by their unique seal. Tamper-evidence was built in — a broken envelope meant interference.',
+          lost:'Nothing — this is the origin point. But writing on clay meant messages were heavy, fragile, and slow. Only important communications justified the effort.',
+          carried:'The concept of a sealed message. Authentication (the seal = the signature). Tamper-evidence. The envelope as a privacy layer around content.',
+          footnote:'Some clay envelopes were so carefully sealed that when archaeologists break them open thousands of years later, the inner tablet is still perfectly preserved and legible.'
+        },
+        {
+          name:'Wax-Sealed Letter', tabName:'02 Wax Seal', era:'Hand-Powered', year:'Middle Ages – 1800s',
+          displayLines:[{text:'Wax-Sealed',size:'s72'},{text:'Letter',size:'s80',accent:true}],
+          quote:{text:'By these presents and the seal affixed hereto, let it be known...',attr:'— Standard royal correspondence formula'},
+          body:'Paper replaced clay. Wax replaced the outer envelope. A letter was <strong>folded upon itself</strong> — no separate envelope needed — and sealed with a blob of hot wax impressed with a signet ring. Breaking the seal was an act of opening; an intact seal was proof of privacy. The wax seal was both lock and signature.',
+          meta:[{k:'Innovation',v:'Paper replaces clay; folding replaces wrapping; wax replaces clay seal'},{k:'Materials',v:'Rag paper, sealing wax (beeswax + resin), metal signet ring'},{k:'Security',v:'Unique signet impression in wax = identity + tamper-evidence'},{k:'Delivery',v:'Royal post riders, private couriers, coaching inns'},{k:'Status',v:'Ceremonial — used in formal documents and wedding invitations'}],
+          numbers:[{big:'1,000+',unit:'Years of Use'},{big:'~5',unit:'Days London to York'},{big:'1516',unit:'Royal Mail Established'}],
+          context:[{l:'Who Used It',v:'Royalty, nobility, clergy, merchants, diplomats'},{l:'Where',v:'Courts, monasteries, counting houses, diplomatic pouches'},{l:'Skill Required',v:'Literacy (still rare), proper letter folding, seal craft'},{l:'Body Posture',v:'Seated at writing desk, candle for melting wax'},{l:'Cultural Significance',v:'The wax seal created the template for all future postal security. Its visual language — the stamped circle, the broken seal — persists in digital padlock icons and "verified" badges.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The crack of breaking wax; sizzle of hot wax dripping onto paper'},{cls:'tactile',type:'Touch',desc:'The bump of the wax seal under your thumb; the texture of folded rag paper'},{cls:'visual',type:'Sight',desc:'Red wax disc with heraldic impression; the folded letter\'s geometry'},{cls:'gestural',type:'Gesture',desc:'Sliding a finger under the fold, breaking the seal to open'}],
+          gained:'Lightweight, portable messages. The folded letter format. The wax seal as personal brand. Postal networks connecting nations.',
+          lost:'The permanence of clay. Paper is fragile, flammable, perishable. Messages became ephemeral — which also meant they could be destroyed if needed.',
+          carried:'The sealed letter as a unit of private communication. The ritual of opening. The expectation that correspondence is personal and protected.',
+          footnote:'The phrase "my lips are sealed" derives from the wax seal tradition — a promise as binding as an unbroken seal on a letter.'
+        },
+        {
+          name:'The Paper Envelope', tabName:'03 Envelope', era:'Mechanical', year:'1840s – Present',
+          displayLines:[{text:'The Paper',size:'s72'},{text:'Envelope',size:'s80',accent:true}],
+          quote:{text:'An envelope is a security device disguised as stationery.',attr:'— Postal history observation'},
+          body:'The separate paper envelope — a folded sleeve with a <strong>gummed flap</strong> — was a product of mass manufacturing and the penny post. For the first time, the privacy wrapper was distinct from the message. Letters no longer needed to be folded cleverly; you simply slid them into an envelope, licked the flap, and dropped it in a <strong>mailbox</strong>.',
+          meta:[{k:'Innovation',v:'Separate privacy wrapper; machine-made standardized sizes; gummed flap'},{k:'Origin',v:'Popularized alongside Rowland Hill\'s Penny Post (UK, 1840)'},{k:'Materials',v:'Machine-made paper, gummed adhesive, printed address window'},{k:'Standard Sizes',v:'#10 business, A2 personal, C4 international'},{k:'Status',v:'Still in use — but declining rapidly against email'}],
+          numbers:[{big:'1840',unit:'Penny Post Launch'},{big:'150B',unit:'Envelopes/Year (Peak)'},{big:'72%',unit:'Decline Since 2001'}],
+          context:[{l:'Who Used It',v:'Everyone — the envelope democratized correspondence completely'},{l:'Where',v:'Homes, offices, mailboxes, post offices worldwide'},{l:'Skill Required',v:'None — fold, insert, lick, stamp, mail'},{l:'Body Posture',v:'Seated at desk or kitchen table; licking the flap and pressing'},{l:'Cultural Significance',v:'The paper envelope created the visual template that email would inherit: the triangular flap shape, the "inbox" tray on a desk, the act of "opening" a message. Its silhouette became the universal symbol for mail.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The soft tear of opening an envelope; paper sliding against paper'},{cls:'tactile',type:'Touch',desc:'The gummed flap on the tongue; the weight of a letter in hand'},{cls:'visual',type:'Sight',desc:'The triangular flap, the address window, the stamp in the corner'},{cls:'gestural',type:'Gesture',desc:'Sliding a finger under the flap, or using a letter opener'}],
+          gained:'Standardized, mass-produced privacy. Separate wrapper and content. The mailbox. The stamp. An address system that connected every building on Earth.',
+          lost:'The personal seal as identity. The craftsmanship of folded letters. The wax seal\'s tamper-evidence — a licked envelope can be steamed open.',
+          carried:'The envelope\'s silhouette — the triangular flap shape that would become the universal icon for email. The inbox tray. The mailbox. The stamp.',
+          footnote:'The diagonal "diamond" envelope pattern used worldwide was patented in 1845 by Edwin Hill and Warren De La Rue — its shape is the silhouette behind every email icon today.'
+        },
+        {
+          name:'The Postcard', tabName:'04 Postcard', era:'Mechanical', year:'1869 – Present',
+          displayLines:[{text:'The',size:'s72'},{text:'Postcard',size:'s80',accent:true}],
+          quote:{text:'Wish you were here.',attr:'— The most written sentence in postal history'},
+          body:'The postcard stripped the envelope away entirely. A <strong>brief message on an open card</strong> — no privacy, no seal, no flap. It was faster, cheaper, and introduced the concept of a message so short it didn\'t need an enclosure. The postcard was the first format designed for brevity — a physical ancestor of the text message.',
+          meta:[{k:'Innovation',v:'Open message format; image + text; no envelope needed'},{k:'Origin',v:'Austria, 1869 (first government-issued postal card)'},{k:'Materials',v:'Stiff card stock, printed image on front, divided back for address + message'},{k:'Cost',v:'Half the price of a letter — speed and economy over privacy'},{k:'Status',v:'Niche — tourist souvenir, art medium'}],
+          numbers:[{big:'1869',unit:'First Postcard'},{big:'1B+',unit:'Sent in 1913 (Peak)'},{big:'~30',unit:'Words Typical Message'}],
+          context:[{l:'Who Used It',v:'Travelers, soldiers, tourists, friends, lovers'},{l:'Where',v:'Holiday destinations, war fronts, any post office'},{l:'Skill Required',v:'None — brevity was the only real requirement'},{l:'Body Posture',v:'Scribbling at a café table, stamp shop, or park bench'},{l:'Cultural Significance',v:'The postcard invented the concept of a short, casual message — not every communication needs to be a full letter. This expectation of brevity carried directly into email, texts, and social media.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The snap of a card against a stack; the postal sorting machine\'s whir'},{cls:'tactile',type:'Touch',desc:'Stiff card stock between fingers; writing on an exposed surface'},{cls:'visual',type:'Sight',desc:'Image on front, split back — a visual format template that persists in UI cards'},{cls:'gestural',type:'Gesture',desc:'Flipping the card over to write; dropping it in a public mailbox'}],
+          gained:'Brevity as a communication format. The visual message (image + text). Speed over privacy. Casual tone in correspondence.',
+          lost:'Privacy — anyone handling the card could read it. The formality of sealed correspondence. The expectation that messages deserve enclosure.',
+          carried:'The concept of a brief, casual message. The "card" format (image + text). The idea that not every communication requires an envelope. The template for social media posts.',
+          footnote:'The golden age of postcards (1900–1915) saw over a billion cards sent annually in the US alone — a per-capita messaging volume that wouldn\'t be matched until email.'
+        },
+        {
+          name:'The Fax Machine', tabName:'05 Fax', era:'Electric', year:'1964 – 2000s',
+          displayLines:[{text:'The Fax',size:'s72'},{text:'Machine',size:'s80',accent:true}],
+          quote:{text:'Did you get my fax? I\'ll send it again just in case.',attr:'— Every office worker, 1985–2000'},
+          body:'The fax machine turned a physical document into an <strong>electrical signal</strong>, sent it over phone lines, and reproduced it on thermal paper at the other end. It was the first technology to transmit the <em>visual appearance</em> of a document — not just its text content. Fax created the expectation of instant document delivery.',
+          meta:[{k:'Key Model',v:'Xerox Telecopier (1966), office fax boom (1980s)'},{k:'Innovation',v:'Scan → transmit → print over phone lines; real-time document transfer'},{k:'Materials',v:'Thermal paper, phone line modem, scanning drum'},{k:'Speed',v:'~6 minutes per page initially; under 1 minute by 1990s'},{k:'Status',v:'Nearly extinct — still used in healthcare and legal (Japan still uses heavily)'}],
+          numbers:[{big:'1843',unit:'First Fax Patent'},{big:'~6',unit:'Min. per Page (Early)'},{big:'1980s',unit:'Office Ubiquity'}],
+          context:[{l:'Who Used It',v:'Office workers, lawyers, doctors, journalists, businesses'},{l:'Where',v:'Every office, hospital, law firm, and newsroom'},{l:'Skill Required',v:'Minimal — feed paper, dial number, press send'},{l:'Body Posture',v:'Standing at the machine, feeding pages, waiting for confirmation'},{l:'Cultural Significance',v:'The fax machine proved that documents could be "sent" without physically moving them. It created the expectation of instant delivery that email would inherit, and introduced the "cover sheet" — metadata attached to content.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The screech of the fax handshake — modem tones negotiating connection'},{cls:'tactile',type:'Touch',desc:'Thermal paper curl; feeding pages through the scanner'},{cls:'visual',type:'Sight',desc:'The slow emergence of a document from the machine; confirmation page printing'},{cls:'gestural',type:'Gesture',desc:'Feeding paper into the machine; tearing off the thermal paper output'}],
+          gained:'Instant document delivery without physical transport. The concept of "sending" a document — it arrives as a copy, the original stays with you.',
+          lost:'The physicality of the original. The fax is a degraded copy — each generation loses quality. The signature on a fax is a copy of a signature.',
+          carried:'The concept of sending a document as opposed to sending a letter. The cover sheet (email\'s subject line + body). The confirmation receipt (read receipts). The "sent" metaphor.',
+          footnote:'Alexander Bain patented the first fax concept in 1843 — 33 years before the telephone was invented. The fax is older than the phone call.'
+        },
+        {
+          name:'Email', tabName:'06 Email', era:'Virtual', year:'1971 – Present',
+          displayLines:[{text:'Email',size:'s80',accent:true}],
+          quote:{text:'QWERTYUIOP',attr:'— Ray Tomlinson\'s first test email to himself, 1971'},
+          body:'Email borrowed <strong>every metaphor</strong> from physical mail. You have an inbox (a desk tray). You open messages (breaking a seal). You attach files (with a paperclip icon). You CC people (carbon copy). The envelope icon on every email app depicts a physical paper envelope with a triangular flap — an object that has nothing to do with how email actually works.',
+          meta:[{k:'Inventor',v:'Ray Tomlinson (first networked email, 1971)'},{k:'Innovation',v:'Asynchronous text messages over computer networks using @ addressing'},{k:'The @ Symbol',v:'Chosen by Tomlinson because it was rarely used and meant "at"'},{k:'Protocol',v:'SMTP (1982) — still the backbone of all email today'},{k:'Status',v:'Dominant — over 300 billion emails sent per day'}],
+          numbers:[{big:'333B',unit:'Emails per Day'},{big:'4.4B',unit:'Email Users'},{big:'1971',unit:'First Email Sent'}],
+          context:[{l:'Who Used It',v:'Everyone with internet access — personal and professional'},{l:'Where',v:'Every device with a screen'},{l:'Skill Required',v:'Basic typing and the concept of addresses'},{l:'Body Posture',v:'The same hunched-over-screen posture as all digital tasks'},{l:'Cultural Significance',v:'Email preserved every postal metaphor even though it shares no physical mechanism with mail. The envelope icon, the inbox tray, the paperclip attachment — all skeuomorphic echoes of a paper postal system.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The "new mail" chime — a synthesized sound with no postal equivalent'},{cls:'tactile',type:'Touch',desc:'None — email is entirely visual and auditory; no weight, no paper, no seal'},{cls:'visual',type:'Sight',desc:'The envelope icon, the paperclip, the inbox tray — all drawn metaphors'},{cls:'gestural',type:'Gesture',desc:'Swiping to archive (filing), tapping to open (breaking the seal), dragging to attach (clipping)'}],
+          gained:'Instant global delivery. Free unlimited messages. Searchable archives. Attachments of any file type.',
+          lost:'Every physical quality of mail — weight, texture, handwriting, the anticipation of the postal carrier. The sealed envelope\'s tactile assurance of privacy.',
+          carried:'Everything. The word "mail." The envelope icon. The inbox. The paperclip. CC and BCC. The "sent" folder. Address books. Every postal metaphor, preserved in pixels.',
+          footnote:'Ray Tomlinson chose the @ symbol for email addresses because it was the least-used character on the keyboard. It literally meant "at" — user AT computer. He couldn\'t remember what his first email said, suggesting it was something like "QWERTYUIOP."'
+        }
+      ]
+    },
+    // ---- SKU 04: HANGING UP ----
+    {
+      id:'hangup', number:'04', titleLines:['"Hanging','Up"'], accentLine:1,
+      subtitle:'From hook to gesture',
+      intro:'When you end a phone call, you tap a red icon of a <strong>handset resting on a cradle</strong>. Your phone has no handset. It has no cradle. The act of "hanging up" refers to early telephones that literally hung on the wall — you hung the earpiece on a hook to disconnect. The hook is gone. The wall mount is gone. The gesture remains.',
+      echo:'A red handset icon, the phrase "hang up," and the decisive finality of ending a call — all echoes of a wall-mounted telephone with a physical hook switch.',
+      stats:[{big:'150',label:'Years of Telephony'},{big:'4',label:'Sensory Modes'},{big:'1877',label:'First Wall Phone'}],
+      links:[
+        {
+          name:'The Telegraph Key', tabName:'01 Telegraph', era:'Electric', year:'1837 – 1960s',
+          displayLines:[{text:'Telegraph',size:'s72'},{text:'Key',size:'s80',accent:true}],
+          quote:{text:'What hath God wrought?',attr:'— First telegraph message, Samuel Morse, 1844'},
+          body:'Before the telephone, the telegraph was the first technology to transmit messages <strong>electrically</strong>. An operator pressed a spring-loaded key to complete a circuit, sending coded pulses (dots and dashes) along a wire. The key had a satisfying mechanical action — press down to connect, release to disconnect. This binary on/off principle would define telephony.',
+          meta:[{k:'Inventor',v:'Samuel Morse & Alfred Vail'},{k:'Origin',v:'United States, 1837–1844'},{k:'Materials',v:'Brass lever, steel spring, copper wire, battery'},{k:'Code',v:'Morse code — dots, dashes, and spaces'},{k:'Status',v:'Extinct — last commercial telegraph 2013 (India)'}],
+          numbers:[{big:'1844',unit:'First Message'},{big:'~30',unit:'Words per Minute'},{big:'1866',unit:'Transatlantic Cable'}],
+          context:[{l:'Who Used It',v:'Telegraph operators, railroad dispatchers, news agencies, military'},{l:'Where',v:'Telegraph offices, railroad stations, newsrooms, battlefields'},{l:'Skill Required',v:'Morse code fluency — months of training; operators were elite communicators'},{l:'Body Posture',v:'Seated at desk, hand resting on key, ear tuned to sounder clicks'},{l:'Cultural Significance',v:'The telegraph collapsed distance. For the first time, a message could travel faster than a horse, a ship, or a train. It created the expectation of instant communication.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Sharp clicking of the key and sounder — a rhythmic mechanical conversation'},{cls:'tactile',type:'Touch',desc:'The spring-loaded brass key — firm downward press to complete the circuit'},{cls:'visual',type:'Sight',desc:'The simple lever mechanism; paper tape emerging from the receiver'},{cls:'gestural',type:'Gesture',desc:'Press to connect, release to disconnect — the binary gesture that defines telephony'}],
+          gained:'Real-time communication over distance. The concept of being "connected" by wire. Binary signaling — on or off.',
+          lost:'Nuance. Tone of voice. The telegraph reduced human expression to dots and dashes. Communication became coded and compressed.',
+          carried:'The on/off principle: completing a circuit to communicate, breaking it to stop. The wire as communication channel. The idea that distance doesn\'t matter.',
+          footnote:'Telegraph operators developed "fists" — individual timing patterns as recognizable as handwriting. They could identify who was sending before reading the message.'
+        },
+        {
+          name:'Bell\'s Telephone', tabName:'02 Bell Phone', era:'Electric', year:'1876 – 1900s',
+          displayLines:[{text:'Bell\'s',size:'s72'},{text:'Telephone',size:'s80',accent:true}],
+          quote:{text:'Mr. Watson, come here. I want to see you.',attr:'— Alexander Graham Bell, first telephone call, 1876'},
+          body:'Alexander Graham Bell\'s telephone converted voice into electrical signals and back again. Early models were simple boxes — you spoke into one end and listened at the other, often the same device. <strong>Wall-mounted</strong> models quickly became standard, with the earpiece literally <strong>hanging on a hook</strong> that served as the on/off switch. Lift the earpiece: connected. Hang it back: disconnected.',
+          meta:[{k:'Inventor',v:'Alexander Graham Bell (patent 1876)'},{k:'Origin',v:'Boston, Massachusetts'},{k:'Materials',v:'Wooden box, electromagnet, diaphragm, copper wire'},{k:'Innovation',v:'Voice as analog electrical signal over wire'},{k:'Status',v:'Extinct — but the "phone call" concept persists everywhere'}],
+          numbers:[{big:'1876',unit:'Patent Filed'},{big:'150K',unit:'Phones by 1886'},{big:'1',unit:'Wire per Call'}],
+          context:[{l:'Who Used It',v:'Businesses first, then wealthy households; operators connected all calls'},{l:'Where',v:'Offices, hotel lobbies, train stations, homes of the affluent'},{l:'Skill Required',v:'Minimal — speak naturally; operators handled routing'},{l:'Body Posture',v:'Standing at the wall unit, earpiece held to ear, mouth near the mouthpiece'},{l:'Cultural Significance',v:'The wall-mounted telephone with its hook switch created the physical vocabulary of telephony: "hanging up," "on the hook," "off the hook." These phrases describe a physical relationship between a handset and a cradle.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The ringing bell — a physical hammer striking a metal bell inside the phone'},{cls:'tactile',type:'Touch',desc:'Lifting the heavy earpiece from the hook; the click of the hook switch'},{cls:'visual',type:'Sight',desc:'The wooden wall box, the crank handle, the dangling earpiece cord'},{cls:'gestural',type:'Gesture',desc:'Hanging the earpiece on the hook to disconnect — the origin of "hanging up"'}],
+          gained:'Real-time voice communication. The telephone call as social ritual. The expectation that you can reach anyone, anywhere, by wire.',
+          lost:'The permanence of written messages. Phone calls leave no record (initially). The telegraph\'s precision — voice introduced ambiguity and misunderstanding.',
+          carried:'The hook switch — lift to connect, hang to disconnect. The ringing bell. The handset form factor. And the phrase that would outlive the object: "hanging up."',
+          footnote:'The word "hello" was popularized specifically as a telephone greeting — Thomas Edison championed it over Bell\'s preferred "ahoy." Before the telephone, "hello" was used to express surprise, not as a greeting.'
+        },
+        {
+          name:'Candlestick Phone', tabName:'03 Candlestick', era:'Electric', year:'1890s – 1930s',
+          displayLines:[{text:'Candlestick',size:'s72'},{text:'Phone',size:'s80',accent:true}],
+          quote:{text:'Number, please.',attr:'— Standard telephone operator greeting'},
+          body:'The candlestick phone separated the mouthpiece (the tall "stick") from the earpiece (handheld receiver). You spoke into the upright stem and held the earpiece to your ear with the other hand. <strong>The earpiece rested on a hook</strong> on the side of the base — the hook switch that connected and disconnected the line. Placing the earpiece on the hook literally "hung up" the call.',
+          meta:[{k:'Design',v:'Upright stem with mouthpiece; separate handheld earpiece'},{k:'Era',v:'1890s – 1930s'},{k:'Innovation',v:'Separated speaking and listening; desk-mountable form factor'},{k:'Materials',v:'Brass or nickel-plated metal, Bakelite earpiece, cloth cord'},{k:'Status',v:'Extinct — iconic antique; frequently appears in period films'}],
+          numbers:[{big:'30+',unit:'Years of Use'},{big:'2',unit:'Hands Required'},{big:'0',unit:'Dials (Operator Only)'}],
+          context:[{l:'Who Used It',v:'Businesses, wealthy homes, public telephone exchanges'},{l:'Where',v:'Desks, hallway tables, telephone booths'},{l:'Skill Required',v:'Basic — lift receiver, wait for operator, request connection'},{l:'Body Posture',v:'One hand holding earpiece to ear, leaning toward the fixed mouthpiece'},{l:'Cultural Significance',v:'The candlestick phone cemented the hook switch gesture. Every phone for the next century would use some variation of "place handset on cradle to disconnect." The silhouette of the handset became the universal phone symbol.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The click of the hook switch engaging; the operator\'s voice; the ringing bell'},{cls:'tactile',type:'Touch',desc:'Cool metal earpiece against the ear; the hook switch clicking into place'},{cls:'visual',type:'Sight',desc:'The elegant candlestick silhouette; the cloth-wrapped cord'},{cls:'gestural',type:'Gesture',desc:'Placing the earpiece back on the hook — the definitive "hang up"'}],
+          gained:'A desk-friendly telephone. The two-piece design (base + handset) that would define phones for decades.',
+          lost:'Two-handed operation required. You couldn\'t take notes while holding both pieces. The telephone began to demand your full physical attention.',
+          carried:'The hook switch as disconnect gesture. The handset silhouette. The ritual of "picking up" and "hanging up." The phone as a physical object you interact with bodily.',
+          footnote:'When someone was being troublesome on a call, you could dramatically slam the earpiece onto the hook — the first angry hang-up. The emotional weight of "hanging up" on someone was born here.'
+        },
+        {
+          name:'Rotary Desk Phone', tabName:'04 Rotary', era:'Electric', year:'1930s – 1980s',
+          displayLines:[{text:'Rotary',size:'s72'},{text:'Desk Phone',size:'s80',accent:true}],
+          quote:{text:'The telephone is a good way to talk to people without having to offer them a drink.',attr:'— Fran Lebowitz'},
+          body:'The rotary phone combined mouthpiece and earpiece into a single <strong>handset</strong> — the banana-shaped object that would become the universal phone icon. It rested in a <strong>cradle</strong>, and lifting it activated the line. Setting it back down — literally placing the handset onto the two prongs of the cradle — disconnected the call. This is the "hang up" we still reference.',
+          meta:[{k:'Innovation',v:'Combined handset (speaker + mic); rotary dial for direct calling'},{k:'Key Model',v:'Western Electric Model 302 (1937), Model 500 (1949)'},{k:'Materials',v:'Bakelite then ABS plastic, coiled handset cord, weighted base'},{k:'Dial',v:'Rotary dial — finger in hole, pull clockwise, wait for return'},{k:'Status',v:'Extinct as primary — decorative/nostalgic use'}],
+          numbers:[{big:'50+',unit:'Years Dominant'},{big:'~10',unit:'Sec. to Dial a Number'},{big:'1',unit:'Handset (Finally)'}],
+          context:[{l:'Who Used It',v:'Everyone — the rotary phone was truly universal'},{l:'Where',v:'Every home, every office, every hotel room, public phone booths'},{l:'Skill Required',v:'None — even children could use it'},{l:'Body Posture',v:'Seated or standing, handset cradled between shoulder and ear for hands-free'},{l:'Cultural Significance',v:'The rotary phone\'s handset shape IS the phone symbol. Its cradle created the definitive "hang up" gesture — set it down, hear the click, the call is over. The weight of the handset gave emotional gravity to ending a call.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The mechanical whir of the rotary dial returning; the click of the cradle switch; the dial tone'},{cls:'tactile',type:'Touch',desc:'The weight of the handset (heavy!); the coiled cord pulling; finger in the dial hole'},{cls:'visual',type:'Sight',desc:'The banana-shaped handset; the numbered dial; the coiled cord'},{cls:'gestural',type:'Gesture',desc:'Placing the heavy handset firmly into the cradle — the satisfying, definitive hang-up'}],
+          gained:'One-handed operation. Self-dialing (no operator needed). The unified handset. The iconic phone shape. The cradle hang-up gesture with weight and finality.',
+          lost:'The elegance of the candlestick. Direct operator assistance. The human element — direct dial replaced the operator\'s familiar voice.',
+          carried:'The handset silhouette that would become the phone icon. The cradle as disconnect switch. The emotional weight of "hanging up" — you PLACE the phone DOWN. It\'s physical, final, visceral.',
+          footnote:'The handset was deliberately made heavy so it would stay in the cradle and properly depress the hook switch. That weight gave "hanging up" its satisfying finality — a quality entirely absent from tapping a glass screen.'
+        },
+        {
+          name:'The Cordless Phone', tabName:'05 Cordless', era:'Digital', year:'1980s – 2010s',
+          displayLines:[{text:'Cordless',size:'s72'},{text:'Phone',size:'s80',accent:true}],
+          quote:{text:'Where\'s the phone? Check between the couch cushions.',attr:'— Every household with a cordless phone'},
+          body:'The cordless phone <strong>freed the handset from the base</strong> — but kept the base as a charging cradle. You still "hung up" by placing the handset back in the cradle, but now there was also an END button. For the first time, disconnecting a call could be done with a <strong>button press</strong> instead of (or in addition to) a physical placement.',
+          meta:[{k:'Innovation',v:'Radio link between handset and base; END button as disconnect option'},{k:'Era',v:'1980s consumer adoption; DECT standard 1992'},{k:'Materials',v:'Plastic handset, rechargeable NiCd/NiMH battery, radio transceiver'},{k:'Range',v:'~50 meters indoors, up to 300 meters outdoors'},{k:'Status',v:'Declining — replaced by mobile phones in most homes'}],
+          numbers:[{big:'~300',unit:'Meters Range'},{big:'2',unit:'Ways to Hang Up'},{big:'1980s',unit:'Consumer Boom'}],
+          context:[{l:'Who Used It',v:'Every household in developed countries; small businesses'},{l:'Where',v:'Homes — finally, you could take a call in any room'},{l:'Skill Required',v:'None — functionally identical to a corded phone'},{l:'Body Posture',v:'Walking around while talking; pacing became a phone call habit'},{l:'Cultural Significance',v:'The cordless phone was the transitional object — it introduced the END button as an alternative to the cradle hang-up, training users that disconnecting could be a button press, not just a physical placement.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Electronic beep when pressing END; the base cradle\'s charging click'},{cls:'tactile',type:'Touch',desc:'Lighter handset; the satisfying click of seating it in the charging cradle'},{cls:'visual',type:'Sight',desc:'Small LCD screen; END button (often red); charging indicator LED'},{cls:'gestural',type:'Gesture',desc:'Pressing END to hang up — or placing in cradle; both options coexist'}],
+          gained:'Mobility within the home. The END button as an alternative disconnect method. The beginning of the transition from physical gesture to button press.',
+          lost:'The weight and finality of the corded hang-up. Cordless phones were light and plastic — hanging up lost its emotional heft. You couldn\'t slam a cordless phone satisfyingly.',
+          carried:'The END button — the precursor to the smartphone\'s red end-call icon. The concept that "hanging up" doesn\'t require a physical hook. The cradle as optional.',
+          footnote:'The cordless phone introduced the universal household problem of the missing handset — leading to the "page" button on the base, which made the handset beep so you could find it between sofa cushions.'
+        },
+        {
+          name:'Smartphone End-Call', tabName:'06 Smartphone', era:'Virtual', year:'2007 – Present',
+          displayLines:[{text:'Smartphone',size:'s72'},{text:'End-Call',size:'s80',accent:true}],
+          quote:{text:'There\'s no satisfying way to hang up on someone with a touchscreen.',attr:'— Internet observation, widely shared'},
+          body:'Your smartphone has no hook, no cradle, no handset, and no weight. To end a call, you tap a <strong>red circle containing the silhouette of a handset</strong> — the silhouette of a rotary phone receiver from the 1930s. The icon literally depicts the act of placing a handset in a cradle. The phrase "hang up" persists even though there is nothing to hang and nowhere to hang it.',
+          meta:[{k:'Innovation',v:'Touch-screen button replaces all physical disconnect mechanisms'},{k:'Icon',v:'Red circle with white handset silhouette — universally recognized'},{k:'Action',v:'Tap to disconnect; no physical gesture required'},{k:'Feedback',v:'Brief haptic pulse; call timer stops; screen changes'},{k:'Status',v:'Universal — the only way billions of people end calls'}],
+          numbers:[{big:'6.8B',unit:'Smartphones'},{big:'0',unit:'Hooks'},{big:'0',unit:'Cradles'}],
+          context:[{l:'Who Used It',v:'Every smartphone user worldwide'},{l:'Where',v:'Everywhere — the phone is always with you'},{l:'Skill Required',v:'None — tap the red button'},{l:'Body Posture',v:'Phone pulled away from ear to see screen, thumb finds the red button, tap'},{l:'Cultural Significance',v:'The smartphone end-call button is a perfect skeuomorphic echo. It depicts a physical object (rotary handset) performing a physical action (resting in a cradle) that hasn\'t existed in the device for decades. We still say "hang up." The ghost is complete.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'A brief tone or silence — nothing like the satisfying click of a cradle switch'},{cls:'tactile',type:'Touch',desc:'A tap on glass — no weight, no resistance, no finality'},{cls:'visual',type:'Sight',desc:'Red circle with handset icon — a 1930s silhouette on a 2020s screen'},{cls:'gestural',type:'Gesture',desc:'Pulling phone from ear, finding the red button, tapping — a multi-step process replacing the one-motion hang-up'}],
+          gained:'Disconnecting from anywhere on Earth. Video calls. Conference calls. Muting, holding, transferring — all on a touchscreen.',
+          lost:'The physical finality of hanging up. The satisfaction of slamming a phone down. The click of the cradle. The weight. You can\'t "hang up angrily" on a touchscreen.',
+          carried:'Everything. The handset icon. The red "end" color. The word "hang up." The concept that ending a call is a deliberate, conscious act. A 150-year-old gesture, preserved as a pixel.',
+          footnote:'Some people instinctively press the end-call button harder when they\'re frustrated — pressing glass firmly against glass — a phantom of the force that used to be required to slam down a handset.'
+        }
+      ]
+    },
+    // ---- SKU 05: SHOPPING CART ----
+    {
+      id:'cart', number:'05', titleLines:['Shopping','Cart'], accentLine:1,
+      subtitle:'From wheelbarrow to checkout button',
+      intro:'You "add to cart" on your phone. The icon is a wheeled wire basket — an object invented in <strong>1937</strong> for a grocery store in Oklahoma City. Your phone has no basket, no wheels, and no aisle. Yet the metaphor persists because the physical shopping cart solved a problem that digital commerce inherited: <em>how do you carry multiple items to a single point of purchase?</em>',
+      echo:'A wire basket icon with wheels, the phrase "add to cart," a checkout counter, and the concept of browsing aisles — all inherited from a physical retail experience.',
+      stats:[{big:'5,000+',label:'Years of Commerce'},{big:'4',label:'Sensory Modes'},{big:'1937',label:'Cart Invented'}],
+      links:[
+        {
+          name:'The Market Stall', tabName:'01 Market', era:'Hand-Powered', year:'3000 BC – Present',
+          displayLines:[{text:'Market',size:'s72'},{text:'Stall',size:'s80',accent:true}],
+          quote:{text:'Come, buy, and carry — the market waits for no one.',attr:'— Ancient market saying'},
+          body:'The open-air market stall is the oldest form of retail. Goods were <strong>displayed on tables or cloths</strong>, and buyers carried purchases by hand, in baskets, or in cloth sacks. There was no browsing in the modern sense — you told the vendor what you wanted, they retrieved it. Every transaction was a <strong>face-to-face negotiation</strong>.',
+          meta:[{k:'Origin',v:'Earliest settled civilizations — Mesopotamia, Egypt, Indus Valley'},{k:'Format',v:'Open-air stalls, covered bazaars, periodic fairs'},{k:'Transaction',v:'Barter initially, then coins; always face-to-face'},{k:'Carrying',v:'Buyer\'s own basket, sack, or servants'},{k:'Status',v:'Thriving — farmers markets and bazaars worldwide'}],
+          numbers:[{big:'5,000+',unit:'Years of Markets'},{big:'1:1',unit:'Buyer to Seller Ratio'},{big:'0',unit:'Carts or Baskets (Provided)'}],
+          context:[{l:'Who Used It',v:'Everyone — markets were universal gathering places'},{l:'Where',v:'Town squares, crossroads, harbor fronts, temple precincts'},{l:'Skill Required',v:'Haggling — pricing was a negotiation, not a fixed number'},{l:'Body Posture',v:'Standing, walking between stalls, carrying purchases by hand'},{l:'Cultural Significance',v:'The market created the concept of "shopping" — moving between vendors, comparing goods, and accumulating purchases. The buyer\'s physical capacity to carry limited their buying.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Vendor calls, haggling voices, coins clinking, animals, crowd noise'},{cls:'tactile',type:'Touch',desc:'Handling goods before buying — squeezing fruit, feeling fabric weight'},{cls:'visual',type:'Sight',desc:'Colorful displays, piled goods, hand-written price signs'},{cls:'gestural',type:'Gesture',desc:'Pointing at items, handing over coins, carrying purchases away in arms'}],
+          gained:'Commerce itself. The exchange of goods for value. The social experience of shopping. Comparison between vendors.',
+          lost:'Nothing — this is the origin. But the market established that buying is a physical, social, embodied act.',
+          carried:'The fundamental retail experience: browse, select, pay, carry. Every digital shopping experience still follows this flow.',
+          footnote:'The word "bazaar" comes from Persian bāzār. The Grand Bazaar in Istanbul, built in 1461, contains over 4,000 shops and is still one of the world\'s most-visited markets.'
+        },
+        {
+          name:'The General Store', tabName:'02 Gen. Store', era:'Mechanical', year:'1700s – 1950s',
+          displayLines:[{text:'General',size:'s72'},{text:'Store',size:'s80',accent:true}],
+          quote:{text:'If we don\'t have it, you don\'t need it.',attr:'— Common general store motto'},
+          body:'The general store put goods <strong>behind a counter</strong>. The shopkeeper was a gatekeeper — you asked for what you wanted, and they retrieved it from shelves behind them. Purchases accumulated <strong>on the counter</strong> until you were done, then everything was tallied, wrapped, and carried out. The counter was the original "cart" — a holding area between selection and payment.',
+          meta:[{k:'Format',v:'Counter-service retail; goods behind the shopkeeper'},{k:'Innovation',v:'Fixed prices (eventually), credit accounts, catalog ordering'},{k:'Materials',v:'Wooden counter, paper wrapping, ledger book for accounts'},{k:'Carrying',v:'Paper bags, string-tied packages, delivery wagons'},{k:'Status',v:'Nearly extinct in original form — convenience stores are descendants'}],
+          numbers:[{big:'250+',unit:'Years Dominant'},{big:'1',unit:'Counter per Store'},{big:'~300',unit:'Product Types'}],
+          context:[{l:'Who Used It',v:'Rural communities, small towns, urban neighborhoods'},{l:'Where',v:'Main streets across America, Europe, and colonial territories'},{l:'Skill Required',v:'Knowing what you needed; the shopkeeper knew the inventory'},{l:'Body Posture',v:'Standing at the counter, pointing, waiting while goods were gathered'},{l:'Cultural Significance',v:'The general store introduced the concept of accumulating purchases in one place before paying — the proto-cart. The counter held your growing pile of goods until the final tally.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The shopkeeper\'s greeting; the cash register bell; paper bags rustling'},{cls:'tactile',type:'Touch',desc:'Leaning on the wooden counter; handling sample goods; paper-wrapped packages'},{cls:'visual',type:'Sight',desc:'Floor-to-ceiling shelves behind the counter; goods in glass jars and wooden crates'},{cls:'gestural',type:'Gesture',desc:'Pointing at items; the shopkeeper retrieving them; the accumulating pile on the counter'}],
+          gained:'A dedicated space for commerce. Fixed locations. Credit accounts. The counter as a staging area for purchases before payment.',
+          lost:'The vibrant competition of the open market. Haggling. The buyer\'s freedom to move between vendors. The shopkeeper now controlled access to goods.',
+          carried:'The concept of a single checkout point. The accumulation of items before a final transaction. The sales counter — ancestor of the checkout page.',
+          footnote:'Many general stores extended credit using a ledger — "put it on my tab." This concept of deferred payment would eventually become the credit card.'
+        },
+        {
+          name:'The Department Store', tabName:'03 Dept. Store', era:'Mechanical', year:'1850s – Present',
+          displayLines:[{text:'Department',size:'s72'},{text:'Store',size:'s80',accent:true}],
+          quote:{text:'Give the lady what she wants.',attr:'— Marshall Field, founder of Marshall Field\'s'},
+          body:'The department store revolutionized retail by letting customers <strong>touch the merchandise themselves</strong>. Goods came out from behind the counter and onto open display floors organized by category — departments. For the first time, <strong>browsing</strong> was encouraged. But a new problem emerged: how do you carry everything you want to buy across a massive multi-floor store?',
+          meta:[{k:'Innovation',v:'Self-service browsing, departmental organization, fixed prices, display windows'},{k:'Key Example',v:'Le Bon Marché (Paris, 1852), Marshall Field\'s (Chicago, 1881)'},{k:'Materials',v:'Glass display cases, price tags, escalators, pneumatic tube cash systems'},{k:'Format',v:'Multiple floors, categorized departments, central cash wrap'},{k:'Status',v:'Declining — many iconic stores have closed'}],
+          numbers:[{big:'1852',unit:'First Modern Store'},{big:'100+',unit:'Departments'},{big:'~1M',unit:'Sq. Ft. (Largest)'}],
+          context:[{l:'Who Used It',v:'Primarily middle-class women; shopping as leisure activity'},{l:'Where',v:'City centers, later suburban malls'},{l:'Skill Required',v:'None — the store was designed to guide you'},{l:'Body Posture',v:'Walking between displays, handling merchandise, arms increasingly full'},{l:'Cultural Significance',v:'Department stores created "browsing" — the idea of looking without a specific purchase in mind. They also created the problem the shopping cart would solve: your arms get full before your desire to shop is exhausted.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The pneumatic tube whoosh; the escalator hum; the murmur of shoppers'},{cls:'tactile',type:'Touch',desc:'Handling goods freely; fabric textures; the weight of accumulating purchases'},{cls:'visual',type:'Sight',desc:'Grand atriums, display windows, organized departments, price tags on everything'},{cls:'gestural',type:'Gesture',desc:'Browsing — touching, lifting, comparing; arms full of potential purchases'}],
+          gained:'Browsing. Self-service. The concept of departments (categories). Window shopping. Shopping as entertainment, not just necessity.',
+          lost:'The personal relationship with a shopkeeper. The expert who knew every product. The intimate scale of commerce. Shopping became anonymous.',
+          carried:'Departmental categories (now "departments" on websites). Browsing as behavior. Price tags. Display merchandising. And the problem: your arms get too full.',
+          footnote:'The phrase "the customer is always right" is attributed to Harry Gordon Selfridge (Selfridges, London, 1909) — a radical idea in an era when shopkeepers controlled the transaction.'
+        },
+        {
+          name:'The Shopping Cart', tabName:'04 Cart', era:'Mechanical', year:'1937 – Present',
+          displayLines:[{text:'Shopping',size:'s72'},{text:'Cart',size:'s80',accent:true}],
+          quote:{text:'There\'s no reason a customer should have to stop shopping just because her arms are full.',attr:'— Sylvan Goldman, inventor of the shopping cart, 1937'},
+          body:'Sylvan Goldman, owner of the Humpty Dumpty supermarket chain in Oklahoma City, noticed customers stopped buying when their hand-held baskets got too heavy. His solution: <strong>a folding metal frame on wheels with two wire baskets</strong>. Customers initially resisted — men thought they looked weak using one, women thought they looked like baby carriages. Goldman hired shills to push empty carts around the store to normalize them.',
+          meta:[{k:'Inventor',v:'Sylvan Goldman'},{k:'Origin',v:'Oklahoma City, Oklahoma, USA, 1937'},{k:'Materials',v:'Tubular steel frame, wire baskets, rubber-wheeled casters'},{k:'Problem Solved',v:'Customers stopped buying when their arms got full'},{k:'Status',v:'Universal in physical retail; icon persists in all e-commerce'}],
+          numbers:[{big:'1937',unit:'Year Invented'},{big:'35M',unit:'Carts in US'},{big:'$500+',unit:'Cost per Cart'}],
+          context:[{l:'Who Used It',v:'Every grocery and retail shopper on Earth'},{l:'Where',v:'Supermarkets, big-box stores, warehouse clubs, malls'},{l:'Skill Required',v:'None — push and fill'},{l:'Body Posture',v:'Both hands on handlebar, pushing while walking down aisles, loading items in'},{l:'Cultural Significance',v:'The shopping cart\'s silhouette — a wire basket on wheels — became the universal symbol for "buy." It solved a physical problem (heavy arms) that digital commerce doesn\'t have, yet the icon persists because the metaphor is so powerful.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Squeaky wheels on tile; items clunking into the wire basket; the wobbling front caster'},{cls:'tactile',type:'Touch',desc:'The cold metal handlebar; the resistance of a full cart; the child seat fold-down'},{cls:'visual',type:'Sight',desc:'Wire basket grid, four wheeled casters, nested carts in corrals'},{cls:'gestural',type:'Gesture',desc:'Pushing down aisles, tossing items in, steering around corners'}],
+          gained:'Unlimited shopping capacity. Impulse buying (you can always add more). The aisle as a browsing path. The checkout lane as final stop.',
+          lost:'The constraint of carrying capacity. When your arms limited your buying, purchases were more intentional. The cart enabled overconsumption.',
+          carried:'The cart icon. The "add to cart" metaphor. The checkout queue. The idea that shopping is a process of accumulation followed by a single payment event.',
+          footnote:'The shopping cart was so successful that Goldman became one of the richest men in Oklahoma. He also invented the folding cart corral — solving the secondary problem of where to put them all.'
+        },
+        {
+          name:'Mail-Order Catalog', tabName:'05 Catalog', era:'Electric', year:'1872 – 2000s',
+          displayLines:[{text:'Mail-Order',size:'s72'},{text:'Catalog',size:'s80',accent:true}],
+          quote:{text:'The wishes of the people call for goods, and the Sears catalog carries the wishes.',attr:'— Richard Sears'},
+          body:'The mail-order catalog let you <strong>shop without entering a store</strong>. You browsed a printed book of products, marked your selections on an order form, and mailed it with payment. Your items arrived weeks later by post or railway express. The catalog introduced <strong>remote shopping</strong> — but kept the concept of browsing, selecting, and an accumulated "order" (the proto-cart).',
+          meta:[{k:'Key Example',v:'Montgomery Ward (1872), Sears Roebuck (1893)'},{k:'Innovation',v:'Shopping without a store; the printed product page; the order form'},{k:'Materials',v:'Printed paper catalog (some over 1,000 pages), mail-in order form, stamps'},{k:'Delivery',v:'US Mail, Railway Express, eventually UPS and FedEx'},{k:'Status',v:'Extinct in print — but the direct ancestor of e-commerce product pages'}],
+          numbers:[{big:'1872',unit:'First Catalog'},{big:'1,000+',unit:'Pages (Sears Peak)'},{big:'10M+',unit:'Catalogs Distributed'}],
+          context:[{l:'Who Used It',v:'Rural families especially; anyone wanting variety beyond local stores'},{l:'Where',v:'Kitchen tables, living rooms — shopping from home'},{l:'Skill Required',v:'Reading; filling out order forms; patience (weeks for delivery)'},{l:'Body Posture',v:'Seated at a table, flipping pages, pencil in hand marking selections'},{l:'Cultural Significance',v:'The mail-order catalog created the template for all remote shopping: browse products with images and descriptions, select items, submit an order, wait for delivery. Amazon\'s product pages are direct descendants of Sears catalog pages.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'Pages turning; pencil scratching on the order form; the mailbox flag clicking up'},{cls:'tactile',type:'Touch',desc:'The thick glossy pages; dog-earing favorites; tearing out the order form'},{cls:'visual',type:'Sight',desc:'Product photos with descriptions; organized categories; the order form grid'},{cls:'gestural',type:'Gesture',desc:'Flipping pages, circling items, tearing out and mailing the order form'}],
+          gained:'Shopping from home. The product page (image + description + price). The wish list (dog-eared pages). The order form — a physical "cart" submitted all at once.',
+          lost:'Touching products before buying. Instant gratification. The social experience of shopping. Returns became a major logistical challenge.',
+          carried:'The product page format. The order form (now checkout). The wish list. The expectation of home delivery. The entire template for e-commerce.',
+          footnote:'The Sears catalog was so ubiquitous in rural America that it was commonly used as toilet paper in outhouses — and when Sears switched from newsprint to glossy paper, they received complaints.'
+        },
+        {
+          name:'The E-Commerce Cart', tabName:'06 Cart Icon', era:'Virtual', year:'1995 – Present',
+          displayLines:[{text:'E-Commerce',size:'s72'},{text:'Cart',size:'s80',accent:true}],
+          quote:{text:'Your cart is empty. Start shopping!',attr:'— Every e-commerce website'},
+          body:'When Amazon launched in 1995, it needed users to understand online shopping immediately. The solution: <strong>borrow every metaphor from physical retail</strong>. A wire basket icon for your cart. "Add to cart" buttons. A "checkout" process. "Aisles" became categories. The cart icon on every e-commerce site depicts a wheeled wire basket from a 1937 Oklahoma supermarket — on a screen that has never contained a single physical object.',
+          meta:[{k:'Innovation',v:'Digital accumulation of items before a single payment event'},{k:'Milestone',v:'Amazon (1995), eBay (1995), Shopify (2006)'},{k:'The Icon',v:'Wire basket with wheels — Sylvan Goldman\'s 1937 invention, rendered as pixels'},{k:'Function',v:'Temporary holding area for selected items before purchase'},{k:'Status',v:'Universal — the cart icon appears on virtually every e-commerce site on Earth'}],
+          numbers:[{big:'$5.8T',unit:'Global E-Commerce'},{big:'70%',unit:'Cart Abandonment Rate'},{big:'0',unit:'Wheels Needed'}],
+          context:[{l:'Who Used It',v:'Billions of online shoppers worldwide'},{l:'Where',v:'Every device with a screen and internet connection'},{l:'Skill Required',v:'Basic digital literacy; clicking/tapping "add to cart"'},{l:'Body Posture',v:'Seated or lying down, scrolling on phone or laptop, tapping "buy"'},{l:'Cultural Significance',v:'The digital shopping cart is a pure skeuomorphic echo. It solves a problem that doesn\'t exist online (heavy arms) using a metaphor from a physical object (wire basket on wheels) that the user has never placed inside their device. Yet the metaphor is so intuitive that no one questions it.',full:true}],
+          sensory:[{cls:'auditory',type:'Sound',desc:'The subtle animation sound or notification when an item is "added to cart"'},{cls:'tactile',type:'Touch',desc:'Tapping "add to cart" on glass — no weight, no wire, no wheels'},{cls:'visual',type:'Sight',desc:'The wire basket icon, the item count badge, the checkout button — all metaphors'},{cls:'gestural',type:'Gesture',desc:'Tapping to add, swiping to remove, tapping to "check out" — all ghosts of physical actions'}],
+          gained:'Shopping from anywhere, anytime. Infinite inventory. Instant price comparison. Personalized recommendations. One-click purchase.',
+          lost:'Every physical quality of shopping — handling products, pushing carts, browsing aisles, the social experience. The 70% cart abandonment rate suggests the digital cart lacks the commitment that a physical cart creates.',
+          carried:'Everything. The cart icon. "Add to cart." Checkout. Aisles (categories). The shopping bag icon (alternative to cart). The entire metaphor of physical retail, preserved as interface design.',
+          footnote:'The 70% cart abandonment rate in e-commerce has no physical equivalent — you\'d never push a full cart to the checkout lane and just walk away. The lack of physical investment in a digital cart makes abandonment psychologically effortless.'
+        }
+      ]
+    }
+  ];
+
+  // ============================================
+  // STATE
+  // ============================================
+  let currentSku = 0;
+  let currentLink = 0;
+  let currentView = 'splash'; // splash | link
+  let visitedLinks = {}; // { 'keyboard-0': true, ... }
+  let expandedRegistryEntry = null;
+
+  // ============================================
+  // THEME
+  // ============================================
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', switchTheme);
+  toggle.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); switchTheme(); }});
+  function switchTheme(){
+    document.documentElement.classList.add('transitioning');
+    const t = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', t==='dark'?'light':'dark');
+    setTimeout(()=>document.documentElement.classList.remove('transitioning'),500);
+  }
+
+  // ============================================
+  // DRAG SCROLL
+  // ============================================
+  const viewport = document.getElementById('viewport');
+  const eraBar = document.getElementById('eraBar');
+  let isDown=false, startX, scrollLeft;
+  viewport.addEventListener('mousedown',e=>{if(e.target.closest('.sku-card'))return;isDown=true;startX=e.pageX-viewport.offsetLeft;scrollLeft=viewport.scrollLeft;});
+  viewport.addEventListener('mouseleave',()=>isDown=false);
+  viewport.addEventListener('mouseup',()=>isDown=false);
+  viewport.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();viewport.scrollLeft=scrollLeft-(e.pageX-viewport.offsetLeft-startX)*1.5;});
+  viewport.addEventListener('scroll',()=>{
+    const r=viewport.scrollLeft/(viewport.scrollWidth-viewport.clientWidth);
+    eraBar.scrollLeft=r*(document.getElementById('eraScroll').scrollWidth-eraBar.clientWidth);
+  });
+
+  // ============================================
+  // OVERLAY MANAGEMENT
+  // ============================================
+  function openSkuOverlay(skuIdx){
+    currentSku=skuIdx;
+    renderSplash();
+    const o=document.getElementById('overlay');
+    o.style.display='flex';
+    requestAnimationFrame(()=>o.classList.add('visible'));
+    document.getElementById('scrollHint').style.opacity='0';
+    updateNav('timeline');
+  }
+  function closeOverlay(e){
+    if(e&&e.target!==e.currentTarget)return;
+    const o=document.getElementById('overlay');
+    o.classList.remove('visible');
+    setTimeout(()=>o.style.display='none',350);
+    document.getElementById('scrollHint').style.opacity='1';
+    updateNav('timeline');
+  }
+  function openAboutOverlay(){
+    closeAllQuiet();
+    const o=document.getElementById('aboutOverlay');
+    o.style.display='flex';
+    requestAnimationFrame(()=>o.classList.add('visible'));
+    o.querySelector('.overlay-panel').scrollTop=0;
+    document.getElementById('scrollHint').style.opacity='0';
+    updateNav('about');
+  }
+  function closeAboutOverlay(e){
+    if(e&&e.target!==e.currentTarget)return;
+    const o=document.getElementById('aboutOverlay');
+    o.classList.remove('visible');
+    setTimeout(()=>o.style.display='none',350);
+    document.getElementById('scrollHint').style.opacity='1';
+    updateNav('timeline');
+  }
+  function openRegistryOverlay(){
+    closeAllQuiet();
+    renderRegistry();
+    const o=document.getElementById('registryOverlay');
+    o.style.display='flex';
+    requestAnimationFrame(()=>o.classList.add('visible'));
+    o.querySelector('.overlay-panel').scrollTop=0;
+    document.getElementById('scrollHint').style.opacity='0';
+    updateNav('registry');
+  }
+  function closeRegistryOverlay(e){
+    if(e&&e.target!==e.currentTarget)return;
+    const o=document.getElementById('registryOverlay');
+    o.classList.remove('visible');
+    setTimeout(()=>o.style.display='none',350);
+    document.getElementById('scrollHint').style.opacity='1';
+    updateNav('timeline');
+  }
+  function closeAllOverlays(){
+    ['overlay','aboutOverlay','registryOverlay'].forEach(id=>{
+      const o=document.getElementById(id);
+      o.classList.remove('visible');
+      setTimeout(()=>o.style.display='none',350);
+    });
+    document.getElementById('scrollHint').style.opacity='1';
+    updateNav('timeline');
+  }
+  function closeAllQuiet(){
+    ['overlay','aboutOverlay','registryOverlay'].forEach(id=>{
+      const o=document.getElementById(id);
+      o.classList.remove('visible');
+      o.style.display='none';
+    });
+  }
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlay();closeAboutOverlay();closeRegistryOverlay();}});
+  function updateNav(active){
+    document.getElementById('navTimeline').classList.toggle('active-nav',active==='timeline');
+    document.getElementById('navRegistry').classList.toggle('active-nav',active==='registry');
+  }
+
+  // ============================================
+  // RENDER SPLASH VIEW
+  // ============================================
+  function renderSplash(){
+    const s=SKEUOMORPHS[currentSku];
+    const panel=document.getElementById('overlayPanel');
+    let titleHtml=s.titleLines.map((l,i)=>{
+      let cls='splash-display-line '+(i===0?'s88':i===1?'s96':'s88');
+      if(i===s.accentLine)cls+=' accent';
+      return `<span class="${cls}">${l}</span>`;
+    }).join('');
+
+    let tocHtml=s.links.map((lnk,i)=>`
+      <div class="toc-item" onclick="showLink(${i})">
+        <div class="toc-number">${String(i+1).padStart(2,'0')}</div>
+        <div class="toc-info">
+          <div class="toc-name">${lnk.name}</div>
+          <div class="toc-meta-row"><span class="toc-era-tag">${lnk.era}</span><span class="toc-year">${lnk.year}</span></div>
+        </div>
+        <div class="toc-arrow">&rarr;</div>
+      </div>`).join('');
+
+    let statsHtml=s.stats.map(st=>`<div class="chain-stat-cell"><div class="chain-stat-big">${st.big}</div><div class="chain-stat-label">${st.label}</div></div>`).join('');
+
+    panel.innerHTML=`
+      <div class="overlay-header">
+        <div class="overlay-title-bar"><span class="overlay-sku-label">${s.number}</span><span class="overlay-sku-name">${s.titleLines.join(' ')}</span></div>
+        <button class="close-btn" onclick="closeOverlay()">&times;</button>
+      </div>
+      <div class="view-splash active" id="viewSplash">
+        <div class="splash-view">
+          <div class="splash-era">Skeuomorph ${s.number} &mdash; ${s.links.length} Links</div>
+          <div class="splash-display">${titleHtml}</div>
+          <div class="splash-subtitle">${s.subtitle}</div>
+          <hr class="splash-rule">
+          <p class="splash-intro">${s.intro}</p>
+          <div class="echo-callout"><div class="echo-callout-label">The Echo</div><div class="echo-callout-text">${s.echo}</div></div>
+          <div class="toc-label">The Chain &mdash; ${s.links.length} Evolutionary Links</div>
+          <div class="toc-list">${tocHtml}</div>
+          <div class="chain-stats">${statsHtml}</div>
+        </div>
+      </div>`;
+    panel.scrollTop=0;
+  }
+
+  // ============================================
+  // RENDER LINK VIEW
+  // ============================================
+  function showLink(idx){
+    currentLink=idx;
+    const s=SKEUOMORPHS[currentSku];
+    const lnk=s.links[idx];
+    const panel=document.getElementById('overlayPanel');
+    const key=s.id+'-'+idx;
+
+    // Collect echo
+    if(!visitedLinks[key]){
+      visitedLinks[key]=true;
+      showToast(s.number,lnk.name);
+    }
+
+    let tabsHtml=s.links.map((l,i)=>`<div class="chain-tab${i===idx?' active':''}" onclick="showLink(${i})">${String(i+1).padStart(2,'0')} ${l.tabName.split(' ').pop()}</div>`).join('');
+
+    let displayHtml=lnk.displayLines.map(d=>{
+      let cls='link-display-line '+d.size;
+      if(d.accent)cls+=' accent';
+      return `<span class="${cls}">${d.text}</span>`;
+    }).join('');
+
+    let metaHtml=lnk.meta.map(m=>`<div class="meta-row"><div class="meta-key">${m.k}</div><div class="meta-val">${m.v}</div></div>`).join('');
+    let numHtml=lnk.numbers.map(n=>`<div class="number-cell"><div class="number-big">${n.big}</div><div class="number-unit">${n.unit}</div></div>`).join('');
+    let ctxHtml=lnk.context.map(c=>`<div class="context-cell${c.full?' full-width':''}"><div class="context-label">${c.l}</div><div class="context-value">${c.v}</div></div>`).join('');
+    let sensHtml=lnk.sensory.map(s=>`<div class="sensory-row"><div class="s-dot ${s.cls}"></div><div class="s-type">${s.type}</div><div class="s-desc">${s.desc}</div></div>`).join('');
+
+    let prevBtn=idx>0?`<button class="link-nav-btn" onclick="showLink(${idx-1})">&larr; ${String(idx).padStart(2,'0')} ${s.links[idx-1].tabName.split(' ').pop()}</button>`:'<span></span>';
+    let nextBtn=idx<s.links.length-1?`<button class="link-nav-btn" onclick="showLink(${idx+1})">${String(idx+2).padStart(2,'0')} ${s.links[idx+1].tabName.split(' ').pop()} &rarr;</button>`:'<span></span>';
+
+    panel.innerHTML=`
+      <div class="overlay-header">
+        <div class="overlay-title-bar"><span class="overlay-sku-label">${s.number}</span><span class="overlay-sku-name">${s.titleLines.join(' ')}</span></div>
+        <button class="close-btn" onclick="closeOverlay()">&times;</button>
+      </div>
+      <div class="view-link active">
+        <div class="back-bar"><button class="back-btn" onclick="renderSplash()"><span>&larr;</span> Back to overview</button></div>
+        <div class="chain-nav">${tabsHtml}</div>
+        <div class="link-content">
+          <div class="link-era-badge">${lnk.era} Era</div>
+          <div class="link-display">${displayHtml}</div>
+          <div class="link-year-big">${lnk.year}</div>
+          <hr class="link-rule">
+          <div class="period-quote"><div class="period-quote-mark">&ldquo;</div><div class="period-quote-text">${lnk.quote.text}</div><div class="period-quote-attr">${lnk.quote.attr}</div></div>
+          <div class="link-two-col"><div><p class="link-body">${lnk.body}</p></div><div class="link-meta-col">${metaHtml}</div></div>
+          <div class="section-label">By the Numbers</div>
+          <div class="numbers-row">${numHtml}</div>
+          <div class="section-label">Context &amp; Usage</div>
+          <div class="context-grid">${ctxHtml}</div>
+          <div class="sensory-section"><div class="section-label">Sensory Profile</div>${sensHtml}</div>
+          <hr class="link-rule">
+          <div class="section-label">Evolution from Previous Link</div>
+          <div class="change-pair">
+            <div class="change-box gained"><div class="change-label gained-label">What Was Gained</div><div class="change-text">${lnk.gained}</div></div>
+            <div class="change-box lost"><div class="change-label lost-label">What Was Lost</div><div class="change-text">${lnk.lost}</div></div>
+          </div>
+          <div class="carried-section"><div class="carried-label">What Carried Forward</div><div class="carried-text">${lnk.carried}</div></div>
+          <div class="overlay-footnote"><div class="fn-marker">*</div><div class="fn-text">${lnk.footnote}</div></div>
+        </div>
+        <div class="link-nav">${prevBtn}${nextBtn}</div>
+      </div>`;
+    panel.scrollTop=0;
+  }
+
+  // ============================================
+  // TOAST
+  // ============================================
+  function showToast(skuNum,linkName){
+    const c=document.getElementById('toastContainer');
+    const t=document.createElement('div');
+    t.className='echo-toast';
+    t.innerHTML=`<svg class="echo-toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg><div><div class="echo-toast-text">Echo Collected</div><div class="echo-toast-sub">${skuNum} — ${linkName}</div></div>`;
+    c.appendChild(t);
+    setTimeout(()=>t.remove(),2600);
+  }
+
+  // ============================================
+  // ECHO REGISTRY
+  // ============================================
+  function renderRegistry(){
+    const list=document.getElementById('registryList');
+    const totalLinks=SKEUOMORPHS.reduce((a,s)=>a+s.links.length,0);
+    const collected=Object.keys(visitedLinks).length;
+
+    document.getElementById('registryCount').textContent=`${collected} / ${totalLinks} collected`;
+    document.getElementById('registryFill').style.width=`${(collected/totalLinks)*100}%`;
+    document.getElementById('registryEchoCount').textContent=collected*4;
+
+    const chainsExplored=SKEUOMORPHS.filter(s=>s.links.some((_,i)=>visitedLinks[s.id+'-'+i])).length;
+    document.getElementById('registryChainsCount').textContent=`${chainsExplored} / ${SKEUOMORPHS.length}`;
+    document.getElementById('registryYearSpan').textContent=collected>0?'5,000+':'—';
+
+    const checkSvg=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    const lockSvg=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+
+    let html='';
+    SKEUOMORPHS.forEach(s=>{
+      html+=`<div class="section-label" style="margin-top:28px;margin-bottom:12px;">Skeuomorph ${s.number} — ${s.titleLines.join(' ')}</div>`;
+      s.links.forEach((lnk,i)=>{
+        const key=s.id+'-'+i;
+        const ic=!!visitedLinks[key];
+        const ie=expandedRegistryEntry===key&&ic;
+        html+=`<div class="registry-entry ${ic?'collected':'locked'} ${ie?'expanded':''}" data-key="${key}">`;
+        html+=`<div class="registry-entry-header" onclick="${ic?`toggleReg('${key}')`:''}">`
+        html+=`<div class="registry-entry-number">${String(i+1).padStart(2,'0')}</div>`;
+        html+=`<div class="registry-entry-info"><div class="registry-entry-name">${lnk.name}</div><div class="registry-entry-meta"><span class="registry-entry-era">${lnk.era}</span><span class="registry-entry-status">${ic?'Collected':'Undiscovered'}</span></div></div>`;
+        html+=`<div class="registry-entry-badge">${ic?checkSvg:lockSvg}</div></div>`;
+        if(ic){
+          html+=`<div class="registry-echoes"><div class="registry-echoes-inner">`;
+          lnk.sensory.forEach(sn=>{
+            html+=`<div class="registry-echo-row"><div class="registry-echo-dot ${sn.cls}"></div><div class="registry-echo-type">${sn.type}</div><div class="registry-echo-desc">${sn.desc}</div></div>`;
+          });
+          html+=`<div class="registry-carried"><div class="registry-carried-label">What Carried Forward</div><div class="registry-carried-text">${lnk.carried}</div></div>`;
+          html+=`</div></div>`;
+        } else {
+          html+=`<div class="registry-locked-hint"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Visit this link to collect its echoes</div>`;
+        }
+        html+=`</div>`;
+      });
+    });
+    list.innerHTML=html;
+  }
+  function toggleReg(key){
+    expandedRegistryEntry=expandedRegistryEntry===key?null:key;
+    renderRegistry();
+  }
+
+  // ============================================
+  // INIT
+  // ============================================
+  let hintHidden=false;
+  viewport.addEventListener('scroll',()=>{if(!hintHidden){document.getElementById('scrollHint').style.opacity='0';hintHidden=true;}});
+  viewport.scrollLeft=viewport.scrollWidth;
+  </script>
+</body>
+</html>
