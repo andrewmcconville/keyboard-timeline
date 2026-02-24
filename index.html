@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -587,6 +587,14 @@
   .about-colophon-text { font-family:'Playfair Display',serif; font-size:15px; font-style:italic; font-weight:400; line-height:1.65; color:var(--text-secondary); }
   .about-colophon-text strong { color:var(--text-primary); font-weight:600; }
 
+  /* Sources */
+  .about-sources { margin-bottom:36px; }
+  .source-group-label { font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:2.5px; color:var(--accent-warm); margin-top:20px; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--border-rule); }
+  .source-group-label:first-child { margin-top:0; }
+  .source-entry { font-size:12px; line-height:1.7; color:var(--text-secondary); font-weight:300; margin-bottom:6px; padding-left:12px; border-left:1px solid var(--border-subtle); }
+  .source-entry em { font-style:italic; color:var(--text-primary); }
+  .source-url { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); word-break:break-all; }
+
   /* ============================================ ECHO REGISTRY ============================================ */
   .registry-view { padding:48px 36px 60px; }
   .registry-pretitle { font-family:'JetBrains Mono',monospace; font-size:8px; text-transform:uppercase; letter-spacing:3px; color:var(--accent-warm); margin-bottom:24px; }
@@ -792,6 +800,39 @@
           <div class="about-section-label">How to Explore</div>
           <p class="about-body">Begin at the <strong>Timeline</strong>. The primary skeuomorph &mdash; <strong>Onscreen Keyboard</strong> &mdash; is fully explorable: click its card to open its chain and trace the echo backward through six evolutionary links. As you visit each link, its sensory echoes are automatically collected in your <strong>Echo Registry</strong>. The four remaining skeuomorphs are previews &mdash; their chains are visible but not yet available to explore.</p>
           <div class="about-colophon"><div class="about-colophon-text">Designed as an exercise in <strong>information architecture</strong> and <strong>editorial design for the screen</strong>. Every typeface, spacing decision, and interaction pattern was chosen to echo the materiality of the objects being described &mdash; ink on paper, metal on ribbon, light on glass.</div></div>
+          <div class="about-section-label">Sources</div>
+          <div class="about-sources">
+            <div class="source-group-label">Skeuomorphism &amp; Design Theory</div>
+            <div class="source-entry">Norman, Don. <em>The Design of Everyday Things.</em> Basic Books, revised edition, 2013.</div>
+            <div class="source-entry">&ldquo;Skeuomorphism.&rdquo; Nielsen Norman Group, 3 June 2024. <span class="source-url">nngroup.com/articles/skeuomorphism</span></div>
+            <div class="source-entry">&ldquo;What is Skeuomorphism?&rdquo; Interaction Design Foundation. <span class="source-url">interaction-design.org/literature/topics/skeuomorphism</span></div>
+            <div class="source-entry">&ldquo;Skeuomorph.&rdquo; Wikipedia. <span class="source-url">en.wikipedia.org/wiki/Skeuomorph</span></div>
+
+            <div class="source-group-label">The Typewriter &amp; QWERTY</div>
+            <div class="source-entry">Stamp, Jimmy. &ldquo;The QWERTY Keyboard Will Never Die.&rdquo; <em>Smithsonian Magazine</em>, 3 May 2013. <span class="source-url">smithsonianmag.com/history/the-qwerty-keyboard-will-never-die-where-did-the-150-year-old-design-come-from-49863249</span></div>
+            <div class="source-entry">&ldquo;Christopher Latham Sholes.&rdquo; <em>Encyclop&aelig;dia Britannica</em>. <span class="source-url">britannica.com/biography/Christopher-Latham-Sholes</span></div>
+            <div class="source-entry">&ldquo;Production on the Sholes and Glidden Type-Writer Began.&rdquo; Library of Congress Business Reference Services. <span class="source-url">guides.loc.gov/this-month-in-business-history/march/typewriter-production-began</span></div>
+            <div class="source-entry">&ldquo;Christopher Latham Sholes.&rdquo; National Inventors Hall of Fame. <span class="source-url">invent.org/inductees/christopher-sholes</span></div>
+            <div class="source-entry">&ldquo;Origins of the QWERTY Keyboard.&rdquo; WI101, University of Wisconsin. <span class="source-url">wi101.wisc.edu/qwerty-keyboard-and-morse-code</span></div>
+
+            <div class="source-group-label">The IBM Selectric</div>
+            <div class="source-entry">&ldquo;The IBM Selectric.&rdquo; IBM Corporate Archives. <span class="source-url">ibm.com/history/selectric</span></div>
+            <div class="source-entry">&ldquo;IBM Selectric.&rdquo; Wikipedia. <span class="source-url">en.wikipedia.org/wiki/IBM_Selectric</span></div>
+
+            <div class="source-group-label">The Shopping Cart</div>
+            <div class="source-entry">Wilson, Terry P. <em>The Cart That Changed the World: The Career of Sylvan N. Goldman.</em> University of Oklahoma Press, 1978.</div>
+            <div class="source-entry">&ldquo;Goldman, Sylvan Nathan.&rdquo; <em>The Encyclopedia of Oklahoma History and Culture</em>, Oklahoma Historical Society. <span class="source-url">okhistory.org/publications/enc/entry?entry=GO004</span></div>
+            <div class="source-entry">&ldquo;How the Shopping Cart Went From Failure to Fixture.&rdquo; <em>History.com</em>, 30 July 2025. <span class="source-url">history.com/articles/shopping-cart-inventor-sylvan-goldman-supermarkets</span></div>
+
+            <div class="source-group-label">Writing Instruments</div>
+            <div class="source-entry">Finlay, Michael. <em>Western Writing Implements in the Age of the Quill Pen.</em> Plains Books, 1990.</div>
+            <div class="source-entry">&ldquo;History of the Steel Pen Trade.&rdquo; Birmingham Pen Trade Heritage Association. <span class="source-url">penroom.co.uk</span></div>
+
+            <div class="source-group-label">The iPhone &amp; Touchscreen Keyboard</div>
+            <div class="source-entry">Jobs, Steve. &ldquo;iPhone Keynote.&rdquo; Macworld Conference &amp; Expo, San Francisco, 9 January 2007.</div>
+            <div class="source-entry">Isaacson, Walter. <em>Steve Jobs.</em> Simon &amp; Schuster, 2011.</div>
+          </div>
+
           <div class="about-credits">
             <div class="about-section-label">Colophon</div>
             <div class="about-credit-row"><div class="about-credit-key">Display</div><div class="about-credit-val">Playfair Display &mdash; serif with editorial weight</div></div>
